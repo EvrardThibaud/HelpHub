@@ -11,7 +11,6 @@ body{
     align-items: center;
     flex-direction: column;
     gap: 20px;
-
     /* background-color: #171a2e; */
     /* background-color: red; */
     background: linear-gradient(0deg, #0d0f1a 0%, #171a2e 50%);
