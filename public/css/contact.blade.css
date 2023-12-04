@@ -1,0 +1,117 @@
+body{
+    user-select: none;
+}
+
+#content{
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+
+    /* background-color: #171a2e; */
+    /* background-color: red; */
+    background: linear-gradient(0deg, #0d0f1a 0%, #171a2e 50%);
+}
+
+#info{
+    color: white;
+    margin-bottom: 100px;
+}
+
+
+form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    gap: 10px;
+
+    color: white;
+    font-size:1em;
+    
+}
+
+
+
+form label{
+    color: white 
+}
+
+form{
+    width: 80vw;
+}
+
+.input_div{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    gap: 2px;
+}
+
+select{
+    border: none;
+    outline: none;
+
+    height: 30px;
+    width: 200px;
+    padding: 5px;
+
+    color:  #171a2e;
+    font-weight: bolder;
+}
+
+input{
+    border: none;
+    outline: none;
+
+    height: 25px;
+    width: 200px;
+    padding: 5px;
+
+    color:  #171a2e;
+    font-weight: bolder;
+
+}
+
+input[type="file"]{
+    color: white;
+}
+
+textarea{
+    padding: 5px;
+    min-height: 25px;
+    min-width: 200px;
+    max-width: 40vw;
+    max-height: 20vh;
+}
+
+#submit_button{
+    height: 35px;
+    width: 200px;
+
+    border-radius: 0;
+    background-color: white;
+
+    border: none;
+
+    color:  #171a2e;
+    font-weight: bolder;
+
+    cursor: pointer;
+    
+    transition-duration: 0.2s;
+}
+
+
+
+#submit_button:active{
+
+    letter-spacing: 0.5px;
+
+    
+}

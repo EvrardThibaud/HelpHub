@@ -1,0 +1,21 @@
+
+#les_adresses {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0; /* Marge au-dessus de la liste */
+    display: none; /* Cachée par défaut */
+    position: absolute;
+    left: 0; /* Alignement à gauche */
+    top: calc(100% + 5px); /* Position sous l'input */
+    z-index: 999;
+}
+
+#les_adresses li {
+    background-color: #333; /* Couleur de fond */
+    padding: 5px;
+}
+
+#les_adresses li:hover{
+    cursor: pointer;
+    background-color: #1b1b1b; /* Couleur de fond */
+}

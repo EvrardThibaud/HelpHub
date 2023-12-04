@@ -1,0 +1,33 @@
+#footer {
+    flex-direction: column;    
+    width: 100%;
+    height: auto;
+    background-color: black;
+
+}
+
+#footer a {
+    margin: 20px;
+    color : white;
+    text-decoration: none; 
+}
+
+#footer p {
+    margin: 7px;
+    color : white;
+    text-decoration: none; 
+}
+
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;  
+}
+
+#footer #logo{
+
+    font-size: 2em;
+    font-weight: bolder;
+
+}

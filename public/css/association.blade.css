@@ -1,0 +1,51 @@
+h1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#content{
+    display:flex;
+}
+
+#container_left{
+    height: 100vh;
+}
+
+#container_left img{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#container_right{
+    width: 70vw;
+    max-width: 70vw;
+    margin: 15px;
+}
+
+#nomasso{
+    margin: 15px;
+    padding: 15px;
+    color: white;
+    background: #171a2e;
+}
+
+#contact{
+    margin: 20px;
+}
+
+#descriptionasso{
+    margin: 20px;
+}
+
+#troisdernact{
+    margin: 20px;
+}
+
+#lesactions{    
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    justify-content : space-around;
+
+}

@@ -1,0 +1,50 @@
+#navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #171a2e;
+    padding: 10px 20px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+  }
+  
+  #navigation a{
+    color: white;
+    text-decoration: none;
+    margin: 10px;
+    padding: 10px;
+  }
+
+  #navigation a.active{
+    background-color: rgba(127,127,127,0.2);
+    border-bottom: 3px solid white;
+  }
+
+  #deco:hover{
+    color:red;
+  }
+  #leftpart {
+    display: flex;
+  }
+
+  #page{
+    display: block;
+    margin: 15px;
+    min-height: 80vh;
+  }
+
+  #leftsection{
+    background-color: red;
+    width: 70vw;
+  }
+
+  #rightsection{
+    background-color: green;
+    width: 30vw;
+    height: 80vh;
+  }
+
+
+  .flex{
+    display: flex;
+  }

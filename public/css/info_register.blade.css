@@ -1,0 +1,13 @@
+
+#info_register{
+    box-sizing: border-box;
+    padding: 20px;
+    user-select: text;
+    width: 100%;
+    background-color: white;
+}
+
+#info_register p{
+    width: 100%;
+    text-align: justify;
+}

@@ -1,0 +1,113 @@
+#div_form_recherche{
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    height: 90vh;
+    width: 15vw;
+
+    top: 10vh;
+
+    position: sticky ;
+
+    color: white !important; 
+
+    background-color: #171a2e;
+    /* background: linear-gradient(0deg, #0d0f1a 0%, #171a2e 50%); */
+
+}
+
+/* ----  Titre ---- */
+
+#div_form_recherche h2{
+    margin: 10px;
+    text-align: center;
+    width: 15vw;
+   
+}
+
+/* ----  Form ---- */
+
+
+#div_form_recherche #form_recherche_association{
+    width: 20vw     ;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+
+
+}
+
+/* ----  Input ---- */
+
+#lieu{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.input_div{
+    position: relative;
+}
+
+#div_form_recherche input[type=text]{
+    border: none;
+    outline: none;
+
+    height: 25px;
+    width: 22vh;
+    padding: 5px;
+
+    color:  #171a2e;
+    font-weight: bolder;
+    
+}
+
+#div_form_recherche select{
+    border: none;
+    outline: none;
+
+    height: 25px;
+    width: 200px;
+    
+    color:  #171a2e;
+    font-weight: bolder;
+}
+
+
+#div_form_recherche input[type=submit]{
+    height: 35px;
+    width: 22vh;
+
+    border-radius: 0;
+    background-color: white;
+
+    border: none;
+    
+    color:  #171a2e;
+    font-weight: bolder;
+    
+    transition-duration: 0.2s;
+    cursor : pointer;
+}
+
+
+
+#div_form_recherche input[type=submit]:hover{
+    letter-spacing: 0.5px;
+
+
+
+
+    
+}
+
+
+
+
