@@ -11,7 +11,6 @@ use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
 
-
 Route::get('/contact', [ContactController::class, 'showForm'])->name('contact.show');
 Route::post('/contact', [ContactController::class, 'submitForm'])->name('contact.submit');
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Action;
-use App\Models\LesAssociation;
+use App\Models\Association;
 use App\Models\Commentaire;
 use App\Models\Utilisateur;
 use App\Models\ThematiqueAction;
@@ -157,7 +157,7 @@ class ActionController extends Controller
             'participationdon'=>ParticipationDon::all(),
             'demandebenevolat'=>DemandeBenevolat::all(),
             'demandedon'=>DemandeDon::all(),
-            'associations'=>LesAssociation::all(), 
+            'associations'=>Association::all(), 
             'thematique_choisie'=> $thematique_choisie,
             'association_choisie'=> $association_choisie,
             'triage_choisie'=>$idtriagedate,
@@ -176,7 +176,7 @@ class ActionController extends Controller
     	return view ("welcome", [
             'actions'=>$actions,
             'thematiques'=>Thematique::all() ,
-            'associations'=>LesAssociation::all() ,
+            'associations'=>Association::all() ,
             'participationbenevolat'=>ParticipationBenevolat::all(),
             'participationdon'=>ParticipationDon::all(),
             'demandebenevolat'=>DemandeBenevolat::all(),

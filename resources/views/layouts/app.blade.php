@@ -9,6 +9,7 @@
         
         <link rel="stylesheet" href="css/adressecompletion.css">
         <link rel="stylesheet" href="css/dashboard/app.blade.css">
+        <link rel="stylesheet" href="css/dashboard/mescoms.blade.css">
     </head>
     <body>
         @include('includes.header')

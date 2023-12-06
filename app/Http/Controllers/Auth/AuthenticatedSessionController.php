@@ -20,17 +20,58 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login');
     }
 
+    public function createAsso(): View
+    {
+        return view('auth.login_asso');
+    }
+
     /**
      * Handle an incoming authentication request.
      */
+    // public function store(LoginRequest $request): RedirectResponse
+    // {
+    //     $request->authenticate();
+
+    //     $request->session()->regenerate();
+
+    //     return redirect()->intended(RouteServiceProvider::HOME);
+    // }
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $credentials = $request->only('email', 'password');
+        
+        // Authentification utilisateur
+        if (Auth::guard('web')->attempt($credentials)) {
+            // Authentification réussie pour les utilisateurs
+            $request->session()->regenerate();
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
 
-        $request->session()->regenerate();
-
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // Redirection en cas d'échec de l'authentification
+        return back()->withErrors(['email' => 'Invalid credentials']);
     }
+
+    
+    public function storeAsso(LoginRequest $request): RedirectResponse
+    {
+        $credentials = $request->only('email', 'password');
+        $credentials['mailassociation'] = $credentials['email'];
+        unset($credentials['email']);
+        // Authentification association
+        if (Auth::guard('association')->attempt($credentials)) {
+            
+            // Authentification réussie pour les associations
+            $request->session()->regenerate();
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
+
+        // Redirection en cas d'échec de l'authentification
+        return back()->withErrors(['email' => 'Invalid credentials']);
+    }
+    
+    
+
+    
 
     /**
      * Destroy an authenticated session.

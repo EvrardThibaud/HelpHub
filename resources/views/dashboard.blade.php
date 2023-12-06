@@ -9,7 +9,7 @@
                 <h1>Bienvenue {{Auth::user()->prenomutilisateur}} {{Auth::user()->nomutilisateur}}</h1>
                 <div>
                     <h2>Les actions que vous aimez</h2>
-                    <div>caca</div>
+                    <div>Aucune</div>
                 </div>
             </div>
             <div id="rightsection">

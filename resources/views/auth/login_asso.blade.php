@@ -1,14 +1,13 @@
 
-@section('title', 'HelpHub - Identification')
+@section('title', 'HelpHub - Identification Association')
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="" :status="session('status')" />
 
     <div id="content">
         
-        <form method="POST" action="{{ route('login') }}">
-            <h1>Se connecter</h1>
-
+        <form method="POST" action="{{ route('login_asso') }}">
+            <h1>Se connecter en tant qu'association</h1>
             @csrf
 
             @if(session('error'))
@@ -20,7 +19,7 @@
             <!-- Email Address -->
             <div class="input_div">
                 <x-input-label for="email" :value="__('Votre adresse email : ')" />
-                <x-text-input id="email" class="" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="exemple@helphub.com"/>
+                <x-text-input id="email" class="" type="email" name="email" :value="old('mailassociation')" required autofocus autocomplete="username" placeholder="exemple@helphub.com"/>
                 <x-input-error  :messages="$errors->get('email')" class="alert" />
             </div>
     
@@ -40,15 +39,7 @@
                     </a>
                 @endif
             </div>
-            
-            <!-- Remember Me -->
-            <!-- <div id="remember_me_div">
-                <label for="remember_me" class="">
-                    <input id="remember_me" type="checkbox" class="" name="remember">
-                    <span class="">{{ __('Se souvenir de moi') }}</span>
-                </label>
-            </div>
-        -->
+
         <div class="">
                 
             
@@ -59,8 +50,8 @@
             <a class="" href="{{ route('register') }}">
                 {{ __('Je n\'ai pas encore de compte.') }}
             </a>
-            <a class="" href="{{ route('login_asso') }}">
-                {{ __('Je suis une association') }}
+            <a class="" href="{{ route('login') }}">
+                {{ __('Je ne suis pas une association.') }}
             </a>
         </form>
 

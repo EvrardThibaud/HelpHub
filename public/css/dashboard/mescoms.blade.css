@@ -1,0 +1,13 @@
+#comment{
+    position: relative;
+    box-sizing: border-box;
+    
+    padding: 10px;
+    margin: 15px; 
+
+    border: transparent 1px solid;
+    background-color: rgb(226, 225, 225);
+    
+    color: #171a2e;
+    list-style: none;
+}

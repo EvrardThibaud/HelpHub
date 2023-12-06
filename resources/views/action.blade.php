@@ -70,14 +70,26 @@
                                     </div>
                                     <p>{{ $commentaire->textecommentaire }}</p>
                                     <p id="like_section">
-                                        <form action="incrementer-likes" method="POST">
+                                        <form id="form_like" action="incrementer-likes" method="POST">
                                             @csrf
                                             <input type="hidden" name="idcommentaire" value="{{ $commentaire->idcommentaire }}">
                                             <button style="all:inherit;" type="submit">
                                             
-                                            
-
-                                            <i class="fa-heart fa-regular"></i>
+                                            @php 
+                                                $find = false; 
+                                            @endphp
+                                            @foreach ($commentaire->like as $like)
+                                                @if (Auth::user() && $like["idutilisateur"] == Auth::user()->idutilisateur)
+                                                    @php 
+                                                        $find = true; 
+                                                    @endphp
+                                                @endif
+                                            @endforeach
+                                            @if ($find)
+                                                <i class="fa-heart fa-solid"></i>
+                                            @else
+                                                <i class="fa-heart fa-regular"></i>
+                                            @endif
 
                                              {{ $commentaire->nblikecommentaire }}</button>
                                         </form>
@@ -108,8 +120,8 @@
                 
                 @php 
                     $actionId = $action->idaction; 
-                    $countDemandedon = 0;
-                    $countDemandeBenevolat = 0;
+                    $countParticipationDon = 0;
+                    $countParticipationBenevol = 0;
                     $nbLike = 0
                 @endphp
                 
@@ -120,23 +132,23 @@
                     @endif
                 @endforeach   
 
-                @foreach($demandedon as $item)
+                @foreach($participationdon as $item)
                     @if($item['idaction'] == $actionId)
-                        @php $countDemandedon++; @endphp
+                        @php $countParticipationDon++; @endphp
                     @endif
                 @endforeach
                 
-                @foreach($demandebenevolat as $item)
+                @foreach($participationbenevolat as $item)
                     @if($item['idaction'] == $actionId)
-                        @php $countDemandeBenevolat++; @endphp
+                        @php $countParticipationBenevol++; @endphp
                     @endif
                 @endforeach
                 
-                @if($countDemandedon > 0)
+                @if($countParticipationDon > 0)
                     <button class="bt">
                         <a >Faire un don</a>
                     </button>    
-                @elseif($countDemandeBenevolat > 0)
+                @elseif($countParticipationBenevol > 0)
                     <button class="bt">
                         <a >Participer</a>
                     </button>
@@ -147,8 +159,9 @@
 
                 <p>Nombre de like: {{$nbLike}}</p>
 
-                
-
+                bene: {{$demandebenevolat}}
+                don: {{$demandedon}}
+                info: {{$information}}
 
             </div>
             
@@ -174,6 +187,12 @@
 </body>
 </html>
 <script>
+    // ne pas recharger la  page
+    // var form_like = document.querySelector('#form_like');
+    // form_like.addEventListener("submit", function(e){
+    //     e.preventDefault();
+    // });
+    //----------------------------
 let slideIndex = 0;
 let timer;
 

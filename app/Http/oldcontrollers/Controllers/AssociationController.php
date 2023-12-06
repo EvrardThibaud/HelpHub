@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LesAssociation;
+use App\Models\Association;
 use App\Models\Thematique;
 use App\Models\Action;
 use App\Models\ActionLike;
@@ -18,7 +18,7 @@ class AssociationController extends Controller
 
     public function one(Request $request){
         $id = $request->query('id');
-        $asso = LesAssociation::with('media')->find($id);
+        $asso = Association::with('media')->find($id);
         $query = Action::join('association', 'association.idassociation', '=', 'action.idassociation')
         ->where('association.idassociation', '=', $id);
         $query->orderBy('datepublicationaction', 'DESC')->get();
