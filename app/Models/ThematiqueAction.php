@@ -12,4 +12,9 @@ class ThematiqueAction extends Model
     protected $primaryKey = ['idthematique', 'idaction'];
     public $incrementing = false;
     public $timestamps = false;
+
+    protected $fillable = [
+        'idaction',
+        'idthematique',
+    ];
 }

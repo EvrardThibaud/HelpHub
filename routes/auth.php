@@ -16,8 +16,7 @@ Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 
-    Route::get('login_asso', [AuthenticatedSessionController::class, 'createAsso'])
-                ->name('login_asso');
+   
 
     // Route::post('login_asso', [AuthenticatedSessionController::class, 'store']);
 
@@ -30,6 +29,8 @@ Route::middleware('guest')->group(function () {
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
                 ->name('login');
+    Route::get('login_asso', [AuthenticatedSessionController::class, 'createAsso'])
+                ->name('login_asso');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
     Route::post('login_asso', [AuthenticatedSessionController::class, 'storeAsso']);

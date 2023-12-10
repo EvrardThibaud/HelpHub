@@ -13,7 +13,7 @@ class Adresse extends Model
     protected $primaryKey = "codepostaladresse";
     public $timestamps = false;
 
-    protected $fillable = ['codepostaladresse', 'villeadresse', 'numdepartement']; // Ajout de 'codepostaladresse'
+    protected $fillable = ['codepostaladresse', 'villeadresse', 'numdepartement', 'coordonneex', 'coordonneey']; // Ajout de 'codepostaladresse'
 
 
 }

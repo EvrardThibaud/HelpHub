@@ -12,4 +12,8 @@ class Information extends Model
     protected $primaryKey = "idaction";
     public $timestamps = false;
     // public $incrementing = false;
+
+    protected $fillable = [
+        'idaction',
+    ];
 }

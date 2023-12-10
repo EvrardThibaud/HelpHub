@@ -12,4 +12,12 @@ class DemandeDon extends Model
     protected $primaryKey = "idaction";
     public $timestamps = false;
     // public $incrementing = false;
+
+    protected $fillable = [
+        'idaction',
+        'ribdon',
+        'objectifdon',
+        'argentrecoltedon',
+        'avantagefiscal',
+    ];
 }

@@ -23,7 +23,7 @@ class Association extends Authenticatable
     protected $fillable = [
         'nomassociation',
         'numtelassociation',
-        'mailassociation',
+        'email',
         'sitewebassociation',
         'descriptionassociation',
         'password',
@@ -48,5 +48,12 @@ class Association extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function actions()
+    {
+        return $this->hasMany(
+            Action::class, 'idassociation', 'idassociation'
+        );
+    }
 
 }

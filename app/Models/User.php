@@ -57,6 +57,19 @@ class User extends Authenticatable
         return $this->belongsTo(Adresse::class, 'codepostaladresse', 'codepostaladresse');
     }
 
+
+    public function media()
+    {
+        return $this->belongsTo(Media::class, 'idmedia', 'idmedia');
+    }
+
+    public function association()
+    {
+        return $this->belongsTo(
+            Association::class, 'idassociation', 'idassociation'
+        );
+    }
+
     public function actionLike()
     {
         return $this->hasOne(ActionLike::class, 'idutlisateur', 'idutlisateur');

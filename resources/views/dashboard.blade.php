@@ -6,19 +6,22 @@
         <div class="flex">
 
             <div id="leftsection">
-                <h1>Bienvenue {{Auth::user()->prenomutilisateur}} {{Auth::user()->nomutilisateur}}</h1>
-                <div>
-                    <h2>Les actions que vous aimez</h2>
-                    <div>Aucune</div>
-                </div>
+                @if (Auth::user()->association)
+                    <h1>Bienvenue {{Auth::user()->association->nomassociation}}</h1>
+                    {{Auth::user()->association}}
+
+                @else
+                    <h1>Bienvenue {{Auth::user()->prenomutilisateur}} {{Auth::user()->nomutilisateur}}</h1>
+                @endif
+        
+        
             </div>
             <div id="rightsection">
-                <p>
-
-                    {{Auth::user()}}
-                    {{Auth::user()->adresse}}
-                </p>
-                {{Auth::user()->actionLike}}
+                @if (Auth::user()->association)
+                    <h3>Type de compte: Association</h3>
+                @else
+                    <h3>Type de compte: Utilisateur</h3>
+                @endif
             </div>
             
         </div>

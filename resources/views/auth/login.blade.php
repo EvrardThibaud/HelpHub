@@ -6,8 +6,8 @@
 
     <div id="content">
         
+        <h1>Se connecter</h1>
         <form method="POST" action="{{ route('login') }}">
-            <h1>Se connecter</h1>
 
             @csrf
 
@@ -16,7 +16,7 @@
                 {{ session('error') }}
             </div>
             @endif
-    
+
             <!-- Email Address -->
             <div class="input_div">
                 <x-input-label for="email" :value="__('Votre adresse email : ')" />
@@ -59,9 +59,7 @@
             <a class="" href="{{ route('register') }}">
                 {{ __('Je n\'ai pas encore de compte.') }}
             </a>
-            <a class="" href="{{ route('login_asso') }}">
-                {{ __('Je suis une association') }}
-            </a>
+    
         </form>
 
     </div>

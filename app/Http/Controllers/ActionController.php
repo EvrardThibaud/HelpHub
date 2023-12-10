@@ -15,6 +15,7 @@ use App\Models\Information;
 use App\Models\Thematique;
 use Illuminate\Http\Request;
 use App\Models\ActionLike;
+use App\Models\Adresse;
 
 class ActionController extends Controller
 {
@@ -24,8 +25,8 @@ class ActionController extends Controller
 
     public function one(Request $request){
         $id = $request->query('id');
-        $query = Commentaire::join('users', 'commentaire.idutilisateur', '=', 'users.idutilisateur')
-        ->leftJoin('media', 'users.idmedia', '=', 'media.idmedia')
+        $query = Commentaire::join('utilisateur', 'commentaire.idutilisateur', '=', 'utilisateur.idutilisateur')
+        ->leftJoin('media', 'utilisateur.idmedia', '=', 'media.idmedia')
         ->where('commentaire.idaction', $id);
         $commentaires = $query->orderBy('datecommentaire', 'DESC')->get();
         $action = Action::join('association', 'action.idassociation', '=', 'association.idassociation')
@@ -42,6 +43,21 @@ class ActionController extends Controller
         $information = Information::join('action', 'information.idaction', '=', 'action.idaction')
         ->where('action.idaction', $id)
         ->get();
+        
+
+        $coordonnex = null;
+
+        // if ($demandebenevolat != null) {
+        //     foreach ($demandebenevolat as $demande) {
+        //         $demandebenevolat_codepostal = $demande->codepostaladresse;
+
+        //         $coordonnex = Adresse::join('action', 'adresse.codepostaladresse', '=', $demandebenevolat_codepostal)
+        //         ->where('action.idaction', $id)
+        //         ->get();
+        //     }
+        // }
+
+
     	return view (
             "action", [
             'action'=>$action,
@@ -52,8 +68,9 @@ class ActionController extends Controller
             'demandedon'=>$demandedon,
             'information'=>$information,
             'actionlike'=>ActionLike::all(),
+            'coordonneex'=>$coordonnex
         ]);
-    }
+    }    
 
     public function recherche(Request $request){
         $idthematique = $request->query('thematique');
@@ -198,5 +215,15 @@ class ActionController extends Controller
         }
 
         return view ("welcome", ['actions'=>Action::all() ]);
+    }
+
+    public function participer(Request $request)
+    {
+    
+        if (auth()->check()) {
+            return view('form_participe');
+        } else {
+            return redirect()->route('login')->with('error', 'Vous devez être connecté pour participer à une action de bénévolat.');
+        }
     }
 }

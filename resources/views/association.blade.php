@@ -16,7 +16,11 @@
         <div id="content">
             
             <div id="container_left">
-                <img src="{{$association->media->image}}">
+                @if ($association->media)
+                    <img src="{{$association->media->image}}">
+                    @else
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Pas_d%27image_disponible.svg/2048px-Pas_d%27image_disponible.svg.png">
+                @endif
             </div>
             
             <div id="container_right">

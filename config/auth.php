@@ -40,10 +40,7 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'association' => [
-            'driver' => 'session',
-            'provider' => 'associations',
-        ],
+        
     ],
 
     /*
@@ -68,10 +65,7 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-        'associations' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Association::class,
-        ],
+        
 
         // 'users' => [
         //     'driver' => 'database',
@@ -105,12 +99,7 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-        'association' => [
-            'provider' => 'associations',
-            'table' => 'password_reset_tokens',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
+       
     ],
 
     /*

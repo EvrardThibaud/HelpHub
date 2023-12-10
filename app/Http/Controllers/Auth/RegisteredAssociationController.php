@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Association;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Models\Association;
 
 class RegisteredAssociationController extends Controller
 {
@@ -32,23 +33,41 @@ class RegisteredAssociationController extends Controller
     {
         $request->validate([
             'nomassociation' => ['required', 'string', 'max:255'],
-            'mailassociation' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Association::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Association::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'numtelassociation' => ['required', 'numeric','digits:10'],
             'sitewebassociation' => ['required', 'string'],
             'descriptionassociation' => ['required', 'string'],
         ]);
 
+        // Vérifier si l'association existe pour l'id donnée'
+        $asso = Association::where('idassociation', $request->idassociation)->first();
 
-        $user = Association::create([
-            'mailassociation' => $request->mailassociation,
-            'nomassociation' => $request->nomassociation,
-            'numtelassociation' => $request->numtelassociation,
-            'descriptionassociation' => $request->descriptionassociation,
-            'sitewebassociation' => $request->sitewebassociation,
+        if (!$asso) {
+            // Si l'asso n'existe pas, créez-la
+            $asso = Association::create([
+                'email' => $request->email,
+                'nomassociation' => $request->nomassociation,
+                'numtelassociation' => $request->numtelassociation,
+                'descriptionassociation' => $request->descriptionassociation,
+                'sitewebassociation' => $request->sitewebassociation,
+                'password' => Hash::make($request->password),
+            ]);
+        }
+
+        $user = User::create([
+            'prenomutilisateur' => $request->nomassociation,
+            'nomutilisateur' => $request->nomassociation,
+            'numtelephone' => $request->numtelassociation,
+            'email' => $request->email,
+            'codepostaladresse' => $request->codepostaladresse,
+            'rue' => $request->rue,
             'password' => Hash::make($request->password),
+            'idassociation' => $asso->idassociation,
         ]);
 
+        $user->association()->associate($asso);
+        $user->save();
         event(new Registered($user));
 
         Auth::login($user);

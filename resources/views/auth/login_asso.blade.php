@@ -6,8 +6,8 @@
 
     <div id="content">
         
+        <h1>Se connecter en tant qu'association</h1>
         <form method="POST" action="{{ route('login_asso') }}">
-            <h1>Se connecter en tant qu'association</h1>
             @csrf
 
             @if(session('error'))
@@ -19,7 +19,7 @@
             <!-- Email Address -->
             <div class="input_div">
                 <x-input-label for="email" :value="__('Votre adresse email : ')" />
-                <x-text-input id="email" class="" type="email" name="email" :value="old('mailassociation')" required autofocus autocomplete="username" placeholder="exemple@helphub.com"/>
+                <x-text-input id="email" class="" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="exemple@helphub.com"/>
                 <x-input-error  :messages="$errors->get('email')" class="alert" />
             </div>
     
@@ -47,7 +47,7 @@
                 {{ __('Se connecter') }}
             </x-primary-button>
         </div>
-            <a class="" href="{{ route('register') }}">
+            <a class="" href="{{ route('register_association') }}">
                 {{ __('Je n\'ai pas encore de compte.') }}
             </a>
             <a class="" href="{{ route('login') }}">

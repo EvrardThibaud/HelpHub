@@ -7,6 +7,9 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CommentaireController;
 use App\Http\Controllers\SignalementCommentaireController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ActionCreationController;
+use App\Http\Controllers\SessionController;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +26,8 @@ Route::get('/action/{id}', [CommentaireController::class, 'show'])->name('action
 Route::post('/comment/add', [CommentaireController::class, 'addComment'])->name('comment.add');
 Route::post('/comment/like', [CommentaireController::class, 'like'])->name('comment.like')->middleware('auth');
 Route::post('/incrementer-likes', [CommentaireController::class, 'incrementerLikes'])->name('incrementerLikes');
+Route::post('/participer', [ActionController::class, 'participer'])->name('participer');
+
 
 Route::post('/comment/signalement', [SignalementCommentaireController::class, 'add'])->name('comment.signalement');
 Route::get('/comment/signalement/message', [SignalementCommentaireController::class, 'showMessage'])->name('comment.signalement.message');
@@ -34,6 +39,8 @@ Route::get('/contact', [ContactController::class, 'showForm'])->name('contact.fo
 Route::post('/contact', [ContactController::class, 'submitForm'])->name('contact.submit');
 Route::get('/contact/confirmation', [ContactController::class, 'confirmation'])->name('contact.confirmation');
 
+Route::get('/action?id={id}', [ActionController::class, 'one'])->name('action.show');
+
 // SIGNALEMENT COMMENTAIRE
 Route::post('/action', [SignalementCommentaireController::class, 'add'])->name('action.submit');
 
@@ -41,6 +48,11 @@ Route::post('/action', [SignalementCommentaireController::class, 'add'])->name('
 Route::get('/politique', function () {
     return view('politique');
 })->name("politique");
+
+Route::get('/form_inscription', function () {
+    return view('form_participe');
+})->name("form_participe");
+
 
 Route::get('/cgu', function () {
     return view('cgu');
@@ -76,15 +88,23 @@ Route::get('/contact', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware('auth')->name('dashboard');
+
+Route::get('/check-session', [SessionController::class, 'checkSession'])->name('check_session');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/mescoms', [ProfileController::class, 'mescoms'])->name('profile.mescoms');
+    Route::get('/mesactions', [ProfileController::class, 'mesactions'])->name('profile.mesactions');
+    Route::get('/creeraction', [ProfileController::class, 'creeraction'])->name('profile.creeraction');
     Route::get('/administration', [ProfileController::class, 'administration'])->name('profile.administration');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::post('/creerbenevolat', [ActionCreationController::class, 'creerbenevolat'])->name('creerbenevolat');
+Route::post('/creerdon', [ActionCreationController::class, 'creerdon'])->name('creerdon');
+Route::post('/creerinformation', [ActionCreationController::class, 'creerinformation'])->name('creerinformation');
 
 //route qui renvoie les suggestions d'adresse
 Route::get('/get-address-suggestions', [AddressController::class, 'getAddressSuggestions']);

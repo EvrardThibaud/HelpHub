@@ -1,9 +1,11 @@
-@section('title', 'HelpHub - Inscription')
+@section('title', 'Inscription - HelpHub')
 <x-guest-layout>
 
 
 
     <div id="content">
+        <h1>Créer un compte d'utilisateur</h1>
+
 
             
             <form id="form_register" method="POST" action="{{ route('register') }}">

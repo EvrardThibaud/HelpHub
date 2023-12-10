@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Action - {{ $action->titreaction ?? 'Aucune' }}</title>
     <link rel="stylesheet" href="{{ asset('css/action.blade.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/map.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
 </head>
 <body>
     @include('includes.header')
@@ -19,7 +22,7 @@
     @if($action)
         <div id="titre_div">
             <h1>{{ $action->titreaction }}</h1>
-        </div>
+        </div> 
         <div id="lesimages" class="carousel">
             <div class="carousel-container">
                 <img src="https://www.bourdet-avocat.fr/wp-inside/uploads/2020/10/aide-par-les-proches-dans-les-actes-de-la-vie-courante-25.10.2020.jpg" alt="">
@@ -36,6 +39,7 @@
                     <p id="description_action">{{ $action->descriptionaction }}</p>
                     <p id="date_action">{{ \Carbon\Carbon::parse($action->datepublicationaction)->isoFormat('D MMMM Y', 'Do MMMM Y') }}</p>
                 </div>
+                
 
                 <div id="comentaires_div">
                     <h2 id="titrecom">Les commentaires</h2>
@@ -115,8 +119,22 @@
                 <!-- teste github 1 2 1 2 ca marche -->
             </div>
 
+            
+
             <div id="container_right">
                 <h3>Plus d'informations</h3>
+                
+
+                @if(auth()->check())
+                    <form action="{{ route('participer') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="action_id" value="{{ $action->idaction }}">
+                        <input type="submit" class="bt" value="Participer">
+                    </form>
+                @else
+                    <p>Connectez-vous pour participer à cette action bénévole.</p>
+                    <a href="{{ route('login') }}" class="bt">Se connecter</a>
+                @endif          
                 
                 @php 
                     $actionId = $action->idaction; 
@@ -143,15 +161,23 @@
                         @php $countParticipationBenevol++; @endphp
                     @endif
                 @endforeach
+
+                
                 
                 @if($countParticipationDon > 0)
                     <button class="bt">
                         <a >Faire un don</a>
                     </button>    
                 @elseif($countParticipationBenevol > 0)
-                    <button class="bt">
-                        <a >Participer</a>
-                    </button>
+                <div id="map"></div>
+                
+                @foreach($demandebenevolat as $demande)
+                    {{ $demande->codepostaladresse }}
+                @endforeach
+                <form action="{{ route('participer') }}" method="POST">
+                    @csrf
+                    <input type="submit" class="bt" value="Participer">
+                </form>
                 @else
                     <!-- <li>Information</li> -->
 
@@ -159,9 +185,9 @@
 
                 <p>Nombre de like: {{$nbLike}}</p>
 
-                bene: {{$demandebenevolat}}
+                <!-- bene: {{$demandebenevolat}}
                 don: {{$demandedon}}
-                info: {{$information}}
+                info: {{$information}} -->
 
             </div>
             
@@ -184,6 +210,8 @@
     }
 </script>
     <script src="{{ asset('js/toggle_like_comm.js') }}" defer></script>
+    <script src="{{ asset('js/map.js') }}" defer></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </body>
 </html>
 <script>

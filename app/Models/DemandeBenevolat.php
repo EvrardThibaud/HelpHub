@@ -12,4 +12,17 @@ class DemandeBenevolat extends Model
     protected $primaryKey = "idaction";
     public $timestamps = false;
     // public $incrementing = false;
+
+    protected $fillable = [
+        'idaction',
+        'codepostaladresse',
+        'competencesrequisesdb',
+        'nombreparticipantdb',
+        'estpresentieldb',
+    ];
+
+    public function adresse()
+    {
+        return $this->belongsTo(Adresse::class, 'codepostaladresse', 'codepostaladresse');
+    }
 }

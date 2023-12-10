@@ -12,8 +12,16 @@ class Action extends Model
     protected $primaryKey = "idaction";
     public $timestamps = false;
 
+    protected $fillable = [
+        'titreaction',
+        'idassociation',
+        'descriptionaction',
+        'idmedia',
+    ];
 
     public function media() {
         return $this->belongsTo(Media::class, 'idmedia', 'idmedia');
     }
+
+    
 }

@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\Adresse;
 use App\Models\Action;
+use App\Models\ActionLike;
+use App\Models\DemandeDon;
+use App\Models\DemandeBenevolat;
+use App\Models\ParticipationBenevolat;
+use App\Models\ParticipationDon;
+use App\Models\LesAssociation;
+use App\Models\Thematique;
 
 class ProfileController extends Controller
 {
@@ -33,6 +40,30 @@ class ProfileController extends Controller
         return view('profile.mescoms', [
             'id'=>$id,
             'commentaires'=>Commentaire::join('action', 'commentaire.idaction', '=', 'action.idaction')->where('idutilisateur', $id)->get()
+        ]);
+    }
+
+    public function mesactions(Request $request): View
+    {
+        $id = $request->user()->idutilisateur;
+        return view('profile.mesactions', [
+            'id'=>$id,
+            'actionlike'=>ActionLike::all(),
+            'associations'=>LesAssociation::all() ,
+            'participationbenevolat'=>ParticipationBenevolat::all(),
+            'participationdon'=>ParticipationDon::all(),
+            'demandebenevolat'=>DemandeBenevolat::all(),
+            'demandedon'=>DemandeDon::all(),
+            'actionlike'=>ActionLike::all(),
+        ]);
+    }
+
+    public function creeraction(Request $request): View
+    {
+        $id = $request->user()->idutilisateur;
+        return view('profile.creeraction', [
+            'id'=>$id,
+            'thematiques'=>Thematique::all(),
         ]);
     }
 

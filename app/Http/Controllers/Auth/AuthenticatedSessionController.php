@@ -25,26 +25,15 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login_asso');
     }
 
-    /**
-     * Handle an incoming authentication request.
-     */
-    // public function store(LoginRequest $request): RedirectResponse
-    // {
-    //     $request->authenticate();
 
-    //     $request->session()->regenerate();
-
-    //     return redirect()->intended(RouteServiceProvider::HOME);
-    // }
     public function store(LoginRequest $request): RedirectResponse
     {
         $credentials = $request->only('email', 'password');
-        
         // Authentification utilisateur
         if (Auth::guard('web')->attempt($credentials)) {
             // Authentification réussie pour les utilisateurs
             $request->session()->regenerate();
-            return redirect()->intended(RouteServiceProvider::HOME);
+            return redirect()->route('dashboard');
         }
 
         // Redirection en cas d'échec de l'authentification
@@ -55,14 +44,11 @@ class AuthenticatedSessionController extends Controller
     public function storeAsso(LoginRequest $request): RedirectResponse
     {
         $credentials = $request->only('email', 'password');
-        $credentials['mailassociation'] = $credentials['email'];
-        unset($credentials['email']);
-        // Authentification association
+        // Authentification utilisateur
         if (Auth::guard('association')->attempt($credentials)) {
-            
-            // Authentification réussie pour les associations
+            // Authentification réussie pour les utilisateurs
             $request->session()->regenerate();
-            return redirect()->intended(RouteServiceProvider::HOME);
+            return redirect()->route('dashboard');
         }
 
         // Redirection en cas d'échec de l'authentification
@@ -76,14 +62,20 @@ class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      */
+
+    
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+        if (Auth::guard('web')->check()) {
+            Auth::guard('web')->logout();
+        } elseif (Auth::guard('association')->check()) {
+            Auth::guard('association')->logout();
+        }
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');
     }
+    
 }

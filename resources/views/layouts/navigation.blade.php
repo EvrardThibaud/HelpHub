@@ -4,16 +4,26 @@
         <a href="{{ route('dashboard') }}" class="{{ Request::is('dashboard*') ? 'active' : '' }}">
             Mon Compte
         </a>
-        <a href="{{ route('profile.edit') }}" class="{{ Request::is('profile*') ? 'active' : '' }}">
-            Profil
-        </a>
-        <a href="{{ route('profile.mescoms') }}" class="{{ Request::is('mescoms*') ? 'active' : '' }}">
-            Mes Commentaires 
-        </a>        
-        @if(Auth::user()->admin)
-            <a href="{{ route('profile.administration') }}" class="{{ Request::is('administration*') ? 'active' : '' }}">
-                Administration
+
+        @if(Auth::user()->association)
+            <a href="{{ route('profile.mesactions') }}" class="{{ Request::is('mesactions*') ? 'active' : '' }}">
+                Mes Actions 
+            </a>              
+            <a href="{{ route('profile.creeraction') }}" class="{{ Request::is('creeraction*') ? 'active' : '' }}">
+                Créer Action 
             </a>  
+        @else
+            <a href="{{ route('profile.edit') }}" class="{{ Request::is('profile*') ? 'active' : '' }}">
+                Profil
+            </a>
+            <a href="{{ route('profile.mescoms') }}" class="{{ Request::is('mescoms*') ? 'active' : '' }}">
+                Mes Commentaires 
+            </a>        
+            @if(Auth::user() && Auth::user()->admin)
+                <a href="{{ route('profile.administration') }}" class="{{ Request::is('administration*') ? 'active' : '' }}">
+                    Administration
+                </a>  
+            @endif
         @endif
     </div>
     <div id="rightpart">
