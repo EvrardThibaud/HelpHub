@@ -19,7 +19,11 @@ class SignalementCommentaire extends Model
         'contenusignalement'
     ];
 
-    // public function media() {
-    //     return $this->belongsTo(Media::class, 'idmedia', 'idmedia');
-    // }
+    public function commentaire() {
+        return $this->belongsTo(Commentaire::class, 'idcommentaire', 'idcommentaire');
+    }    
+    
+    public function utilisateur() {
+        return $this->belongsTo(Utilisateur::class, 'idutilisateur', 'idutilisateur');
+    }
 }

@@ -1,4 +1,7 @@
 
+body.no-scroll {
+    overflow: hidden;
+}
 .bt{
     background-color: #0f243a;
     border: none;
@@ -13,16 +16,92 @@
     margin-top: 15px;
 }
 #mesactions{
+    margin-top: 15px;
     display: flex;
     align-items: center;
     min-height: 80vh;
-    justify-self: start;
     list-style: none;
-
+    flex-wrap: wrap;
     justify-content : space-around;
     gap: 5px;    
-
-
-
     margin-bottom: 20px;
+}
+#pasvalidetexte{
+    opacity: 1;
+    color: orange;
+    background-color: #0f243a;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.pasvalide{
+    opacity: 0.3;
+}
+
+#modifier_ou_supprimer button{
+    display: flex;
+    border: none;
+    background-color: #171a2e;
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+    margin: 5px 5px 5px 0px;
+}
+
+
+#modifier:hover{
+    color: green;
+}
+
+#supprimer:hover{
+    color: red;
+}
+
+#confirmation #c{
+    width: 100vw;
+    background-color: rgba(23, 26, 46, 0.8);
+    height: 100vh;
+    position: fixed;   
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+
+}
+
+#confirmation_content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #171a2e;
+    padding: 20px;
+    width: 50%;
+    height: 50%;
+}
+#confirmation_content #bt{
+    display: flex;
+}
+
+
+
+#confirmation_content #bt .bouton{
+    color: white;
+    text-decoration: none;
+    margin: 15px;
+    background-color: none;
+    border: none;
+}
+
+#confirmation_content #bt .bouton:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
+.hide{
+    display: none;
 }

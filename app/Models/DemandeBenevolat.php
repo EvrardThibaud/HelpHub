@@ -25,4 +25,9 @@ class DemandeBenevolat extends Model
     {
         return $this->belongsTo(Adresse::class, 'codepostaladresse', 'codepostaladresse');
     }
+
+    public function participation()
+    {
+        return $this->hasMany(ParticipationBenevolat::class, 'idaction', 'idaction');
+    }
 }

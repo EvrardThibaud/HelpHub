@@ -1,5 +1,12 @@
 <link rel="stylesheet" href="css/header.blade.css">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/adressecompletion.css">
+<link rel="stylesheet" href="css/dashboard/app.blade.css">
+<link rel="stylesheet" href="css/dashboard/mescoms.blade.css">
+<link rel="stylesheet" href="css/dashboard/mesactions.blade.css">
+<link rel="stylesheet" href="css/dashboard/demandeactions.blade.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="css/actioncard.blade.css">
 <header id="header">
     <a id="logo" href="/"><img src="img/logo.png" alt="logo de helphub"></a>
     <div class="header-right">

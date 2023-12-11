@@ -1,0 +1,32 @@
+#liked-action {
+    position: relative;
+    box-sizing: border-box;
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+#liked-action li {
+    margin-bottom: 10px;
+}
+
+#liked-action button {
+    padding: 8px 12px;
+    background-color: #171a2e;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#liked-action button:hover {
+    opacity: 0.8;
+}
+#liked-action strong {
+    font-weight: bold; /* Ajout du style en gras */
+}
+

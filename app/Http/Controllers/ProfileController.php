@@ -14,9 +14,12 @@ use App\Models\Action;
 use App\Models\ActionLike;
 use App\Models\DemandeDon;
 use App\Models\DemandeBenevolat;
+use App\Models\Information;
 use App\Models\ParticipationBenevolat;
+use App\Models\SignalementCommentaire;
+use App\Models\ThematiqueAction;
 use App\Models\ParticipationDon;
-use App\Models\LesAssociation;
+use App\Models\Association;
 use App\Models\Thematique;
 
 class ProfileController extends Controller
@@ -43,13 +46,54 @@ class ProfileController extends Controller
         ]);
     }
 
+    public function actionlikes(Request $request): View
+    {
+        $id = $request->user()->idutilisateur;
+
+        $likedActions = ActionLike::join('action', 'action_like.idaction', '=', 'action.idaction')
+            ->join('association', 'action.idassociation', '=', 'association.idassociation')
+            ->where('action_like.idutilisateur', $id)
+            ->get(['action.*', 'association.nomassociation']);
+    
+        return view('profile.actionlikes', [
+            'id' => $id,
+            'likedActions' => $likedActions,
+        ]);
+    }
+
     public function mesactions(Request $request): View
     {
         $id = $request->user()->idutilisateur;
         return view('profile.mesactions', [
             'id'=>$id,
             'actionlike'=>ActionLike::all(),
-            'associations'=>LesAssociation::all() ,
+            'associations'=>Association::all() ,
+            'participationbenevolat'=>ParticipationBenevolat::all(),
+            'participationdon'=>ParticipationDon::all(),
+            'demandebenevolat'=>DemandeBenevolat::all(),
+            'demandedon'=>DemandeDon::all(),
+            'actionlike'=>ActionLike::all(),
+        ]);
+    }
+
+    public function supprimeraction(Request $request): View{
+        $id = $request->idaction;
+        if (is_numeric($id)) {
+            $action = Action::find($id);
+    
+            if ($action) {
+                ThematiqueAction::where('idaction', $id)->delete();
+                DemandeBenevolat::where('idaction', $id)->delete();
+                DemandeDon::where('idaction', $id)->delete();
+                Information::where('idaction', $id)->delete();
+                ActionLike::where('idaction', $id)->delete();
+                Action::where('idaction', $id)->delete();
+            } 
+        }
+        return view('profile.mesactions', [
+            'id'=>$id,
+            'actionlike'=>ActionLike::all(),
+            'associations'=>Association::all() ,
             'participationbenevolat'=>ParticipationBenevolat::all(),
             'participationdon'=>ParticipationDon::all(),
             'demandebenevolat'=>DemandeBenevolat::all(),
@@ -64,6 +108,26 @@ class ProfileController extends Controller
         return view('profile.creeraction', [
             'id'=>$id,
             'thematiques'=>Thematique::all(),
+        ]);
+    }
+
+    public function demandeactions(Request $request): View
+    {
+        $id = $request->user()->idutilisateur;
+        return view('profile.demandeactions', [
+            'id'=>$id,
+            'actions'=>Action::where('valideparservice', false)->get(),
+
+        ]);
+    }
+
+    public function comsignales(Request $request): View
+    {
+        $id = $request->user()->idutilisateur;
+        return view('profile.comsignales', [
+            'id'=>$id,
+            'commentaires'=>SignalementCommentaire::all(),
+
         ]);
     }
 

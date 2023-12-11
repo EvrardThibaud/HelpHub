@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Action;
-use App\Models\LesAssociation;
+use App\Models\Association;
 use App\Models\Commentaire;
 use App\Models\Utilisateur;
 use App\Models\ThematiqueAction;
@@ -52,6 +52,8 @@ class ActionCreationController extends Controller
                 'codepostaladresse' => $request->codepostaladresse,
                 'villeadresse' => $request->villeadresse, // Assurez-vous d'avoir la valeur de la ville dans la requête
                 'numdepartement' => substr($request->codepostaladresse, 0, 2), // Adapter selon le format de vos codes postaux
+                'coordonneex' => $request->coordonnex,
+                'coordonneey' => $request->coordonney,
             ]);
         }
 
@@ -59,6 +61,7 @@ class ActionCreationController extends Controller
             'titreaction' => $request->titreaction,
             'descriptionaction' => $request->descriptionaction,
             'idassociation' => auth()->user()->association->idassociation,
+            'valideparservice' => false,
         ]);
 
         $demandebenevolat = DemandeBenevolat::create([
@@ -105,6 +108,7 @@ class ActionCreationController extends Controller
             'titreaction' => $request->titreaction,
             'descriptionaction' => $request->descriptionaction,
             'idassociation' => auth()->user()->association->idassociation,
+            'valideparservice' => false,
         ]);
 
         $demandedon = DemandeDon::create([
@@ -145,6 +149,7 @@ class ActionCreationController extends Controller
             'titreaction' => $request->titreaction,
             'descriptionaction' => $request->descriptionaction,
             'idassociation' => auth()->user()->association->idassociation,
+            'valideparservice' => false,
         ]);
 
         $demandeinformation = Information::create([
@@ -166,4 +171,35 @@ class ActionCreationController extends Controller
 
         return redirect()->route('profile.mesactions');
     }
+
+    function accepteraction(Request $request, $id): RedirectResponse
+    {
+        $action = Action::find($id);
+    
+        if ($action) {
+            $action->valideparservice = true;
+            $action->save();
+            return redirect()->back()->with('action_status', 'success_accepter');
+        } else {
+            return redirect()->back()->with('action_status', 'error');
+        }
+    }
+
+    function refuseraction(Request $request, $id): RedirectResponse
+    {
+        $action = Action::find($id);
+    
+        if ($action) {
+            ThematiqueAction::where('idaction', $id)->delete();
+            DemandeBenevolat::where('idaction', $id)->delete();
+            DemandeDon::where('idaction', $id)->delete();
+            Information::where('idaction', $id)->delete();
+            Action::where('idaction', $id)->delete();
+            return redirect()->back()->with('action_status', 'success_refuser');
+        } else {
+            return redirect()->back()->with('action_status', 'error');
+        }
+    }
+
+
 }

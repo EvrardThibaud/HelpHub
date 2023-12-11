@@ -36,6 +36,8 @@ class RegisteredAssociationController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Association::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'numtelassociation' => ['required', 'numeric','digits:10'],
+            'rue' => ['required', 'string', 'max:100'],
+            'codepostaladresse' => ['required', 'int',"digits:5"],
             'sitewebassociation' => ['required', 'string'],
             'descriptionassociation' => ['required', 'string'],
         ]);

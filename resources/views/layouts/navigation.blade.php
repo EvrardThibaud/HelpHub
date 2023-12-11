@@ -12,10 +12,20 @@
             <a href="{{ route('profile.creeraction') }}" class="{{ Request::is('creeraction*') ? 'active' : '' }}">
                 Créer Action 
             </a>  
+        @elseif (Auth::user()->servicediffusion)
+            <a href="{{ route('profile.demandeactions') }}" class="{{ Request::is('demandeactions*') ? 'active' : '' }}">
+                Demandes Action 
+            </a>
+            <a href="{{ route('profile.comsignales') }}" class="{{ Request::is('comsignales*') ? 'active' : '' }}">
+                Commentaires Signalés 
+            </a>    
         @else
             <a href="{{ route('profile.edit') }}" class="{{ Request::is('profile*') ? 'active' : '' }}">
                 Profil
             </a>
+            <a href="{{ route('profile.actionlikes') }}" class="{{ Request::is('actionlikes*') ? 'active' : '' }}">
+                Mes Actions likés 
+            </a>   
             <a href="{{ route('profile.mescoms') }}" class="{{ Request::is('mescoms*') ? 'active' : '' }}">
                 Mes Commentaires 
             </a>        

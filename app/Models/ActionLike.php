@@ -14,7 +14,9 @@ class ActionLike extends Model
     public $incrementing = false;
     public $timestamps = false;
 
-    protected $fillable = ['idaction', 'idutlisateur'];
+    protected $fillable = ['idaction', 'idutilisateur'];
+
+   
 
     
 }

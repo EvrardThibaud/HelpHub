@@ -70,6 +70,13 @@ class User extends Authenticatable
         );
     }
 
+    public function servicediffusion()
+    {
+        return $this->belongsTo(
+            ServiceDiffusion::class, 'idservicediffusion', 'idservicediffusion'
+        );
+    }
+
     public function actionLike()
     {
         return $this->hasOne(ActionLike::class, 'idutlisateur', 'idutlisateur');

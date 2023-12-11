@@ -27,7 +27,7 @@
                         </div>
                 
                 
-                        <!-- Description Address -->
+                        <!-- Description -->
                         <div class="input_div">
                             <x-input-label for="descriptionaction" :value="__('Votre description :')" />
                             <x-text-input id="descriptionaction" class="" type="descriptionaction" name="descriptionaction" :value="old('descriptionaction')" required autocomplete="descriptionaction"/>
@@ -46,6 +46,16 @@
 
                                 </ul>
                         </div>
+
+                        <!-- coordonne x -->
+                        <div class="input_div" style="display: none;">
+                            <input type="text" name="coordonnex" id="coordonnex" value="">
+                        </div>
+
+                        <!-- coordonne y -->
+                        <div class="input_div" style="display: none;">
+                            <input type="text" name="coordonney" id="coordonney" value="">
+                        </div>
                 
                         <!-- Code postal -->
                         <div class="input_div">
@@ -56,7 +66,7 @@
                         <!-- est présentielr -->
                         <div id="newsletter_div">
                             <label for="estpresentieldb" class="">
-                                <input type="checkbox" id="estpresentieldb" name="estpresentieldb" class="form-checkbox">
+                                <input type="checkbox" @if(old('estpresentieldb')) checked @endif id="estpresentieldb" name="estpresentieldb" class="form-checkbox">
                                 <span class="ml-2 text-sm">{{ __('Est en présentiel ?') }}</span>
                             </label>
                         </div>
@@ -64,7 +74,7 @@
                         <!-- Compétences requises -->
                         <div class="input_div">
                             <x-input-label for="competencesrequisesdb" :value="__('Compétences requises :')" />
-                            <x-text-input id="competencesrequisesdb" class="" type="text" name="competencesrequisesdb" :value="old('competencesrequisesdb')" required autofocus autocomplete="competencesrequisesdb"/>
+                            <x-text-input id="competencesrequisesdb" class="" type="text" name="competencesrequisesdb" :value="old('competencesrequisesdb')" value="Aucune" required autofocus onclick="clearDefaultText()" onblur="resetDefaultText()"  autocomplete="competencesrequisesdb"/>
                             <x-input-error :messages="$errors->get('competencesrequisesdb')" class="alert" />
                         </div>
 
@@ -77,20 +87,23 @@
 
                         <!-- Thematiques -->
                         <div id="newsletter_div">
-                            @foreach ($thematiques as $thematique)
-                                <label for="thematique_{{$thematique->idthematique}}" class="">
-                                    <input type="checkbox" id="thematique_{{$thematique->idthematique}}" name="thematique_{{$thematique->idthematique}}" class="form-checkbox">
-                                    <span class="ml-2 text-sm">{{$thematique->libellethematique}}</span>
-                                </label>
-                                <br>
-                            @endforeach
+                            <div id="them_benevolat">
+                                @foreach ($thematiques as $thematique)
+                                    <label for="thematique_{{$thematique->idthematique}}" class="">
+                                        <input type="checkbox" id="thematique_{{$thematique->idthematique}}" name="thematique_{{$thematique->idthematique}}" class="form-checkbox"
+                                        @if(old("thematique_{$thematique->idthematique}")) checked @endif>
+                                        <span class="ml-2 text-sm">{{$thematique->libellethematique}}</span>
+                                    </label>
+                                    <br>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                     <div id="form_over">
                         <div id="form_login_submit">
                             
                             <x-primary-button id="submit_button">
-                                {{ __('Créer l\'action') }}
+                                {{ __('Envoyer la demande') }}
                             </x-primary-button>
                         </div>
                     </div>
@@ -129,10 +142,10 @@
                             <x-input-error :messages="$errors->get('ribdon')" class="alert" />
                         </div>
 
-                        <!-- est présentielr -->
+                        <!-- avantage fiscal -->
                         <div id="newsletter_div">
                             <label for="avantagefiscal" class="">
-                                <input type="checkbox" id="avantagefiscal" name="avantagefiscal" class="form-checkbox">
+                                <input type="checkbox" @if(old('avantagefiscal')) checked @endif id="avantagefiscal" name="avantagefiscal" class="form-checkbox">
                                 <span class="ml-2 text-sm">{{ __('Avantage fiscal ?') }}</span>
                             </label>
                         </div>
@@ -144,19 +157,23 @@
                         </div>
                         <!-- Thematiques -->
                         <div id="newsletter_div">
-                            @foreach ($thematiques as $thematique)
+                            <div id="them_don">
+
+                                @foreach ($thematiques as $thematique)
                                 <label for="thematique_{{$thematique->idthematique}}" class="">
-                                    <input type="checkbox" id="thematique_{{$thematique->idthematique}}" name="thematique_{{$thematique->idthematique}}" class="form-checkbox">
+                                    <input type="checkbox" id="thematique_{{$thematique->idthematique}}" name="thematique_{{$thematique->idthematique}}" class="form-checkbox"
+                                    @if(old("thematique_{$thematique->idthematique}")) checked @endif>
                                     <span class="ml-2 text-sm">{{$thematique->libellethematique}}</span>
                                 </label>
                                 <br>
-                            @endforeach
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                     <div id="form_over">
                         <div id="form_login_submit">
                             <x-primary-button id="submit_button">
-                                {{ __('Créer l\'action') }}
+                                {{ __('Envoyer la demande') }}
                             </x-primary-button>
                         </div>
                     </div>
@@ -189,19 +206,23 @@
 
                         <!-- Thematiques -->
                         <div id="newsletter_div">
-                            @foreach ($thematiques as $thematique)
-                                <label for="thematique_{{$thematique->idthematique}}" class="">
-                                    <input type="checkbox" id="thematique_{{$thematique->idthematique}}" name="thematique_{{$thematique->idthematique}}" class="form-checkbox">
-                                    <span class="ml-2 text-sm">{{$thematique->libellethematique}}</span>
-                                </label>
-                                <br>
-                            @endforeach
+                            <div id="them_information">
+                                @foreach ($thematiques as $thematique)
+                                    <label for="thematique_{{$thematique->idthematique}}" class="">
+                                        <input type="checkbox" id="thematique_{{$thematique->idthematique}}" name="thematique_{{$thematique->idthematique}}" class="form-checkbox"
+                                        @if(old("thematique_{$thematique->idthematique}")) checked @endif>
+                                        <span class="ml-2 text-sm">{{$thematique->libellethematique}}</span>
+                                    </label>
+                                    <br>
+                                @endforeach
+
+                            </div>
                         </div>
                     </div>
                     <div id="form_over">
                         <div id="form_login_submit">
                             <x-primary-button id="submit_button">
-                                {{ __('Créer l\'action') }}
+                                {{ __('Envoyer la demande') }}
                             </x-primary-button>
                         </div>
                     </div>

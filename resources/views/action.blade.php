@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/map.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
     @include('includes.header')
@@ -23,15 +23,6 @@
         <div id="titre_div">
             <h1>{{ $action->titreaction }}</h1>
         </div> 
-        <div id="lesimages" class="carousel">
-            <div class="carousel-container">
-                <img src="https://www.bourdet-avocat.fr/wp-inside/uploads/2020/10/aide-par-les-proches-dans-les-actes-de-la-vie-courante-25.10.2020.jpg" alt="">
-                <img src="https://in-terre-actif.com/2010/uploads/RITAPosts/tiny_mce/child-774063_960_720.jpg" alt="">
-                <img src="https://www.medecinsdumonde.org/app/uploads/2022/02/benevolat-medecins-du-monde.jpg" alt="">
-            </div>
-            <button class="prev" onclick="prevSlide()">&#10094;</button>
-            <button class="next" onclick="nextSlide()">&#10095;</button>
-        </div>
         <main>
             <div id="container_left">
                 <div id="action_div">
@@ -68,7 +59,17 @@
                                             <img src="https://cdn4.iconfinder.com/data/icons/basic-ui-pack-flat-s94-1/64/Basic_UI_Icon_Pack_-_Flat_user-512.png" >
                                         @endif
                                         <div class="column">
-                                            <h3>{{ $commentaire->prenomutilisateur }} {{ $commentaire->nomutilisateur }}</h3>
+                                            
+                                        
+                                        <h3>
+                                            @if ($commentaire->admin)
+                                                <span style="color: red;">Administrateur {{ $commentaire->prenomutilisateur }} {{ $commentaire->nomutilisateur }}</span>
+                                            @else
+                                                {{ $commentaire->prenomutilisateur }} {{ $commentaire->nomutilisateur }}
+                                            @endif
+                                        </h3>
+
+
                                             <p id="date_commentaire">{{ \Carbon\Carbon::parse($commentaire->datecommentaire)->isoFormat('D MMMM Y', 'Do MMMM Y') }}</p>
                                         </div>
                                     </div>
@@ -116,87 +117,93 @@
                     @endif
                 </div>
 
-                <!-- teste github 1 2 1 2 ca marche -->
             </div>
 
             
 
             <div id="container_right">
+            <img src="https://www.bourdet-avocat.fr/wp-inside/uploads/2020/10/aide-par-les-proches-dans-les-actes-de-la-vie-courante-25.10.2020.jpg" alt="">
                 <h3>Plus d'informations</h3>
                 
-
-                @if(auth()->check())
-                    <form action="{{ route('participer') }}" method="post">
-                        @csrf
-                        <input type="hidden" name="action_id" value="{{ $action->idaction }}">
-                        <input type="submit" class="bt" value="Participer">
-                    </form>
-                @else
-                    <p>Connectez-vous pour participer à cette action bénévole.</p>
-                    <a href="{{ route('login') }}" class="bt">Se connecter</a>
-                @endif          
-                
-                @php 
-                    $actionId = $action->idaction; 
-                    $countParticipationDon = 0;
-                    $countParticipationBenevol = 0;
-                    $nbLike = 0
-                @endphp
-                
-
-                @foreach($actionlike as $like)
-                    @if($like['idaction'] == $actionId)
-                        @php $nbLike++; @endphp
-                    @endif
-                @endforeach   
-
-                @foreach($participationdon as $item)
-                    @if($item['idaction'] == $actionId)
-                        @php $countParticipationDon++; @endphp
-                    @endif
-                @endforeach
-                
-                @foreach($participationbenevolat as $item)
-                    @if($item['idaction'] == $actionId)
-                        @php $countParticipationBenevol++; @endphp
-                    @endif
-                @endforeach
-
-                
-                
-                @if($countParticipationDon > 0)
-                    <button class="bt">
-                        <a >Faire un don</a>
-                    </button>    
-                @elseif($countParticipationBenevol > 0)
-                <div id="map"></div>
-                
-                @foreach($demandebenevolat as $demande)
-                    {{ $demande->codepostaladresse }}
-                @endforeach
-                <form action="{{ route('participer') }}" method="POST">
+                <form id="form_like_action" action="incrementer-likes-action" method="POST">
                     @csrf
-                    <input type="submit" class="bt" value="Participer">
+                    <input type="hidden" name="idaction" value="{{ $action->idaction }}">
+                    <button style="all:inherit;" type="submit">
+                        @php 
+                            $find = false; 
+                        @endphp
+                        @foreach ($action->likes as $like)
+                            @if (Auth::user() && $like["idutilisateur"] == Auth::user()->idutilisateur)
+                                @php 
+                                    $find = true; 
+                                @endphp
+                            @endif
+                        @endforeach
+                        @if ($find)
+                            <i class="fa-heart fa-solid"></i>
+                        @else
+                            <i class="fa-heart fa-regular"></i>
+                        @endif
+                        {{ count($action->likes) }}
+                    </button>
                 </form>
-                @else
-                    <!-- <li>Information</li> -->
+
+
+
+                @if ($action->demandebenevolat)
+                
+                    <p>Adresse: {{$action->demandebenevolat->adresse->villeadresse}} {{$action->demandebenevolat->adresse->codepostaladresse}} ({{$action->demandebenevolat->adresse->numdepartement}})</p>
+                    
+                    <p>Objectif participation: {{ count($action->demandebenevolat->participation) }} / {{ $action->demandebenevolat->nombreparticipantdb }}</p>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {{ (count($action->demandebenevolat->participation) / $action->demandebenevolat->nombreparticipantdb) * 100 }}%;"></div>
+                    </div>
+                    <p>Compétences requises: {{$action->demandebenevolat->competencesrequisesdb}}</p>
+                    <p>Est présentiel ? @if ($action->demandebenevolat->estpresentiuel) ✅ @else ❌ @endif</p>
+                    <p>Thématiques:</p>
+                    <ul>
+                        @foreach ($action->thematiques as $thematique)
+                            <li>{{$thematique->thematique->libellethematique}}</li>
+                        @endforeach
+                    </ul>
+                    <form action="{{ route('candidature') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="idaction" value="{{$action->idaction}}">
+                        <input type="submit" class="bt" value="Participer à l'action">
+                    </form>
+
+                    <div id="map"></div>
+                    
+                    <script>
+                        var coordonneeX = {{$action->demandebenevolat->adresse->coordonneex}};
+                        var coordonneeY = {{$action->demandebenevolat->adresse->coordonneey}};
+                    </script>
+                    
+                    
+                @elseif ($action->demandedon)
+                    <form action="" method="POST">
+                        @csrf
+                        <input type="submit" class="bt" value="Faire un don">
+                    </form>
 
                 @endif
 
-                <p>Nombre de like: {{$nbLike}}</p>
 
-                <!-- bene: {{$demandebenevolat}}
-                don: {{$demandedon}}
-                info: {{$information}} -->
+                
+            
 
             </div>
             
         </main>
     @else
-        <h1>L'action spécifiée n'existe pas.</h1>
+        <div class="centrer">
+            <h1>L'action spécifiée n'existe pas.</h1>
+        </div>
     @endif
+    
+    @include('includes.footer')
 
-    <script>
+<script>
     function toggleSignalementForm(commentaireId, prenom, nom) {
         var form = document.getElementById('signalement-form-' + commentaireId);
         if (form.style.display === 'none' || form.style.display === '') {
@@ -207,7 +214,7 @@
 
         var motif = document.querySelector('textarea[name="contenusignalement"]').value;
         console.log('Message envoyé!\nMotif: ' + motif + '\nUtilisateur: ' + prenom + ' ' + nom);
-    }
+        }
 </script>
     <script src="{{ asset('js/toggle_like_comm.js') }}" defer></script>
     <script src="{{ asset('js/map.js') }}" defer></script>
@@ -215,58 +222,52 @@
 </body>
 </html>
 <script>
-    // ne pas recharger la  page
-    // var form_like = document.querySelector('#form_like');
-    // form_like.addEventListener("submit", function(e){
-    //     e.preventDefault();
-    // });
-    //----------------------------
-let slideIndex = 0;
-let timer;
+    let slideIndex = 0;
+    let timer;
 
-function showSlides() {
-  const slides = document.querySelectorAll('.carousel-container img');
-  if (slides.length > 1) {
-    slideIndex++;
-    if (slideIndex >= slides.length) {
-      slideIndex = 0;
+    function showSlides() {
+        const slides = document.querySelectorAll('.carousel-container img');
+        if (slides.length > 1) {
+            slideIndex++;
+            if (slideIndex >= slides.length) {
+            slideIndex = 0;
+            }
+            const offset = -100 * slideIndex;
+            document.querySelector('.carousel-container').style.transform = `translateX(${offset}vw)`;
+            startTimer(); // Redémarre le timer à chaque transition
+        }
     }
-    const offset = -100 * slideIndex;
-    document.querySelector('.carousel-container').style.transform = `translateX(${offset}vw)`;
-    startTimer(); // Redémarre le timer à chaque transition
-  }
-}
 
-function prevSlide() {
-  slideIndex--;
-  if (slideIndex < 0) {
-    slideIndex = document.querySelectorAll('.carousel-container img').length - 1;
-  }
-  const offset = -100 * slideIndex;
-  document.querySelector('.carousel-container').style.transform = `translateX(${offset}vw)`;
-  resetTimer(); // Réinitialise le timer lors du clic sur le bouton précédent
-}
+    function prevSlide() {
+        slideIndex--;
+        if (slideIndex < 0) {
+            slideIndex = document.querySelectorAll('.carousel-container img').length - 1;
+        }
+        const offset = -100 * slideIndex;
+        document.querySelector('.carousel-container').style.transform = `translateX(${offset}vw)`;
+        resetTimer(); // Réinitialise le timer lors du clic sur le bouton précédent
+    }
 
-function nextSlide() {
-  slideIndex++;
-  if (slideIndex >= document.querySelectorAll('.carousel-container img').length) {
-    slideIndex = 0;
-  }
-  const offset = -100 * slideIndex;
-  document.querySelector('.carousel-container').style.transform = `translateX(${offset}vw)`;
-  resetTimer(); // Réinitialise le timer lors du clic sur le bouton suivant
-}
+    function nextSlide() {
+        slideIndex++;
+        if (slideIndex >= document.querySelectorAll('.carousel-container img').length) {
+            slideIndex = 0;
+        }
+        const offset = -100 * slideIndex;
+        document.querySelector('.carousel-container').style.transform = `translateX(${offset}vw)`;
+        resetTimer(); // Réinitialise le timer lors du clic sur le bouton suivant
+    }
 
-function startTimer() {
-  clearInterval(timer);
-  timer = setInterval(showSlides, 5000); // Change d'image toutes les 2 secondes (ajuste selon tes besoins)
-}
+    function startTimer() {
+        clearInterval(timer);
+        timer = setInterval(showSlides, 5000); // Change d'image toutes les 2 secondes (ajuste selon tes besoins)
+    }
 
-function resetTimer() {
-  clearInterval(timer);
-  startTimer();
-}
+    function resetTimer() {
+        clearInterval(timer);
+        startTimer();
+    }
 
-startTimer(); // Démarre le carousel au chargement de la page
+    startTimer(); // Démarre le carousel au chargement de la page
 
 </script>

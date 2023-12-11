@@ -1,4 +1,9 @@
 main{
+  margin-top: 15px;
+}
+
+.message{
+  color: red
 }
 
 #titre_div{
@@ -8,6 +13,13 @@ main{
     background-color: #171a2e;
     color:white;
     height: 10vh;
+}
+
+.centrer{
+  display: flex;
+  height: 90vh;
+  justify-content: center;
+  align-items: center;
 }
 
 #container_left{
@@ -117,13 +129,18 @@ main{
 
     width: 40%;
     min-height: 80vh;
-    max-height: 90vh;
+    max-height: 150vh;
     
     background-color: #171a2e;
     color: white;
 
 
-}
+
+  }
+  #container_right img{
+    width: 50%;
+  }
+
 
 .bt{
     background-color: #537A5A;
@@ -197,47 +214,15 @@ main{
     margin-top: 15px;
   }
 
-  .carousel {
-    position: relative;
+  .progress-bar {
     width: 100%;
-    max-height: 600px; /* Ajuste cette valeur pour contrôler la hauteur maximale des images */
+    background-color: #f0f0f0;
+    border-radius: 4px;
     overflow: hidden;
-    margin-bottom: 20px;
-  }
-  
-  .carousel-container {
-    display: flex;
-    width: 100%; /* Utilise 100% de la largeur pour afficher une seule image à la fois */
-    transition: transform 0.5s ease-in-out;
-  }
-  
-  .carousel img {
-    flex:0 0 80vw; /* Ajuste la largeur de l'image pour prendre 100% de la largeur de la vue */
-    margin: 0 10vw 0 10vw;
-    height: auto;
-    object-fit: cover;
-  }
-  
-  .carousel button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: #171a2e;
-    border: none;
-    color: white;
-    padding: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .carousel button:hover {
-    opacity: 0.7;
-  }
-  
-  .carousel button.prev {
-    left: 10px;
-  }
-  
-  .carousel button.next {
-    right: 10px;
-  }
+}
+
+.progress {
+    background-color: #3498db;
+    height: 20px;
+    transition: width 0.3s ease-in-out;
+}

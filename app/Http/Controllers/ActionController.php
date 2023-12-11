@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Action;
-use App\Models\LesAssociation;
+use App\Models\Association;
 use App\Models\Commentaire;
 use App\Models\Utilisateur;
 use App\Models\ThematiqueAction;
@@ -14,6 +13,7 @@ use App\Models\DemandeDon;
 use App\Models\Information;
 use App\Models\Thematique;
 use Illuminate\Http\Request;
+use App\Models\Action;
 use App\Models\ActionLike;
 use App\Models\Adresse;
 
@@ -25,6 +25,9 @@ class ActionController extends Controller
 
     public function one(Request $request){
         $id = $request->query('id');
+        if (!is_numeric($id)) {
+            $id = -1;
+        }
         $query = Commentaire::join('utilisateur', 'commentaire.idutilisateur', '=', 'utilisateur.idutilisateur')
         ->leftJoin('media', 'utilisateur.idmedia', '=', 'media.idmedia')
         ->where('commentaire.idaction', $id);
@@ -34,28 +37,9 @@ class ActionController extends Controller
         ->leftJoin('media', 'action.idmedia', '=', 'media.idmedia')
         ->where('action.idaction', $id)
         ->first();
-        $demandebenevolat = DemandeBenevolat::join('action', 'demandebenevolat.idaction', '=', 'action.idaction')
-        ->where('action.idaction', $id)
-        ->get();
-        $demandedon = DemandeDon::join('action', 'demande_don.idaction', '=', 'action.idaction')
-        ->where('action.idaction', $id)
-        ->get();
-        $information = Information::join('action', 'information.idaction', '=', 'action.idaction')
-        ->where('action.idaction', $id)
-        ->get();
         
 
-        $coordonnex = null;
-
-        // if ($demandebenevolat != null) {
-        //     foreach ($demandebenevolat as $demande) {
-        //         $demandebenevolat_codepostal = $demande->codepostaladresse;
-
-        //         $coordonnex = Adresse::join('action', 'adresse.codepostaladresse', '=', $demandebenevolat_codepostal)
-        //         ->where('action.idaction', $id)
-        //         ->get();
-        //     }
-        // }
+        
 
 
     	return view (
@@ -64,11 +48,7 @@ class ActionController extends Controller
             'commentaires'=>$commentaires,
             'participationbenevolat'=>ParticipationBenevolat::all(),
             'participationdon'=>ParticipationDon::all(),
-            'demandebenevolat'=>$demandebenevolat,
-            'demandedon'=>$demandedon,
-            'information'=>$information,
-            'actionlike'=>ActionLike::all(),
-            'coordonneex'=>$coordonnex
+            'actionlike'=>ActionLike::all()
         ]);
     }    
 
@@ -108,7 +88,8 @@ class ActionController extends Controller
         ->leftJoin('media', 'action.idmedia', '=', 'media.idmedia')
         ->leftJoin('demandebenevolat', 'action.idaction', '=', 'demandebenevolat.idaction')
         ->leftJoin('adresse', 'demandebenevolat.codepostaladresse', '=', 'adresse.codepostaladresse')
-        ->leftJoin('departement', 'adresse.numdepartement', '=', 'departement.numdepartement');
+        ->leftJoin('departement', 'adresse.numdepartement', '=', 'departement.numdepartement')
+        ->where('action.valideparservice', true);
 
 
 
@@ -174,7 +155,7 @@ class ActionController extends Controller
             'participationdon'=>ParticipationDon::all(),
             'demandebenevolat'=>DemandeBenevolat::all(),
             'demandedon'=>DemandeDon::all(),
-            'associations'=>LesAssociation::all(), 
+            'associations'=>Association::all(), 
             'thematique_choisie'=> $thematique_choisie,
             'association_choisie'=> $association_choisie,
             'triage_choisie'=>$idtriagedate,
@@ -189,11 +170,12 @@ class ActionController extends Controller
 
         $actions = $query = Action::orderByDesc('datepublicationaction')->take(3)
         ->join('association', 'action.idassociation', '=', 'association.idassociation')
-        ->leftJoin('media', 'action.idmedia', '=', 'media.idmedia')->get();
+        ->leftJoin('media', 'action.idmedia', '=', 'media.idmedia')
+        ->where('action.valideparservice', true)->get();
     	return view ("welcome", [
             'actions'=>$actions,
             'thematiques'=>Thematique::all() ,
-            'associations'=>LesAssociation::all() ,
+            'associations'=>Association::all() ,
             'participationbenevolat'=>ParticipationBenevolat::all(),
             'participationdon'=>ParticipationDon::all(),
             'demandebenevolat'=>DemandeBenevolat::all(),
@@ -202,20 +184,40 @@ class ActionController extends Controller
         ]);
     }
 
-    public function incrementerLikes(Request $request)
+    
+    public function incrementerLikesAction(Request $request)
     {
-        $commentaireId = $request->input('idcommentaire');
-        $commentaire = Commentaire::find($commentaireId);
+        $actionId = $request->input('idaction');
+        
+        if (auth()->check()) {
+            $user = auth()->user();
+            $userLiked = ActionLike::where('idaction', $actionId)
+            ->where('idutilisateur', $user->idutilisateur)
+            ->first();            
 
-        if ($commentaire) {
-            $commentaire->nblikecommentaire++;
-            $commentaire->save();
-
-            return view ("welcome", ['actions'=>Action::all() ]);
+            if ($userLiked) {
+                // User has already liked the action, so unlike it
+                ActionLike::where('idaction', $actionId)
+                ->where('idutilisateur', $user->idutilisateur)
+                ->delete();                return redirect()->back()->with('success', 'Like retiré avec succès!');
+            } else {
+                // User has not liked the action, so add like
+                // Assuming 'likes' is the relationship method on the Action model
+                $userLiked = ActionLike::create([
+                    'idaction' =>  $actionId,
+                    'idutilisateur' => $user->idutilisateur ,
+                ]);
+                return redirect()->back()->with('success', 'Like ajouté avec succès!');
+            }
+        } else {
+            // L'utilisateur n'est pas connecté, redirigez-le vers la page de connexion
+            return redirect()->route('login')->with('error', 'Vous devez être connecté pour effectuer cette action.');
         }
 
-        return view ("welcome", ['actions'=>Action::all() ]);
+        // return redirect()->back()->with('message', 'Action non trouvée.');
     }
+
+
 
     public function participer(Request $request)
     {
@@ -226,4 +228,5 @@ class ActionController extends Controller
             return redirect()->route('login')->with('error', 'Vous devez être connecté pour participer à une action de bénévolat.');
         }
     }
+    
 }

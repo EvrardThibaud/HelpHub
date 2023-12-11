@@ -8,6 +8,7 @@ return [
     'integer' => 'Le champ :attribute doit contenir que des chiffres.',
     'confirmed' => 'Le mot de passe n\'a pas été correctement confirmé. ',
     'min.string' => 'Le champ :attribute doit contenir au moins :min caractères.',
+    'lowercase' => 'Le champ :attribute ne peux pas contenir de majuscule.',
     
     
    

@@ -1,0 +1,26 @@
+#lesactions{
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    min-height: 80vh;
+}
+
+#lesactions button{
+    border: none;
+    background-color: #171a2e;
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+    margin: 5px 5px 5px 0px;
+}
+
+#accepter:hover{
+    color: green;
+}
+
+#refuser:hover{
+    color: red;
+}

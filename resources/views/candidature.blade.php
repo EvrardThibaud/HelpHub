@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/form_inscription.blade.css">
-    <title>Formulaire d'Inscription à une Action Bénévole</title>
-</head>
-<body>
-    @include('includes.header')
-
-    <div id="content">
+@include('includes.header')
+<link rel="stylesheet" href="css/candidature.blade.css">
+<div id="content">
 
         <div id="info">
 
@@ -23,57 +14,40 @@
 
         </div>
 
-        <form action="{{ route('participer') }}" method="post" enctype="multipart/form-data">
-    @csrf
-
+        <form action="{{ route('candidature') }}" method="get">
+        @csrf
+        
+            <input type="hidden" value="{{ $id }}" name="idaction">
             <div class="input_div">
                 <label for="gender">Civilité</label>
                 <select name="gender"> 
                     <option value="none">Veuillez choisir votre genre</option>
                     <option value="homme">Homme</option>
                     <option value="femme">Femme</option>
+                    <option value="femme">Autre</option>
                 </select>
             </div>
 
-            <div class="input_div">
-                <label for="nom">Nom*</label>
-                <input type="text" name="nom" required>  
-            </div>
-
-            <div class="input_div">
-                <label for="prenom">Prénom*</label>
-                <input type="text" name="prenom" required>  
-            </div>
-
-            <div class="input_div">
-                <label for="email">Adresse Email*</label>
-                <input type="email" name="email" required placeholder="exemple@helpub.com">  
-            </div>
-
-            <div class="input_div">
-                <label for="numtelephone">Numéro de Téléphone*</label>
-                <input type="text" name="numtelephone" required placeholder="00 00 00 00 00">  
-            </div>
 
             <div class="input_div">
                 <label for="dob">Date de Naissance*</label>
                 <input type="date" id="dob" name="dob" required>
             </div>
 
-            <div class="input_div" id="parental_agreement_div">
+            <!-- <div class="input_div" id="parental_agreement_div">
                 <label for="parental_agreement">Accord Parental (moins de 18 ans)</label>
                 <input type="file" onchange="checkAge()" id="parental_agreement" name="parental_agreement">
-            </div>
+            </div> -->
 
             <div class="input_div">
                 <label for="motivation">Motivation</label>
                 <textarea name="motivation" required></textarea>
             </div>
 
-            <input type="submit" id="submit_button" value="S'Inscrire">
+            <input type="submit" id="submit_button" value="S'inscrire">
         </form>
 
-        <script>
+        <!-- <script>
             function checkAge() {
                 var dobInput = document.getElementById('dob');
                 var parentalAgreementDiv = document.getElementById('parental_agreement_div');
@@ -92,10 +66,7 @@
                 // Activer ou désactiver le bouton de soumission en fonction de l'âge
                 submitButton.disabled = age < 18 && parentalAgreementInput.value.trim() === '';
             }
-        </script>
-
-    </div>
-    @include('includes.footer')
-
-</body>
-</html>
+        </script>-->
+    
+</div>
+@include('includes.footer')

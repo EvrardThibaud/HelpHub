@@ -207,10 +207,14 @@ input{
     padding: 5px;
     border-bottom: 3px solid rgba(23, 26, 46, 0.6);
 }
+
 #choisir_type_action h3:hover{
     opacity: 0.8;
-    cursor: pointer;
-    
+    cursor: pointer;    
+}
+
+#choisir_type_action h3:active{
+    border-bottom: 0px solid rgba(23, 26, 46, 0.6);
 }
 
 #choisir_type_action h3.active{

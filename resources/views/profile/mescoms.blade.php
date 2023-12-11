@@ -1,7 +1,7 @@
 @section('title', 'Mes Commentaires - HelpHub')
 
 <x-app-layout>
-
+<link rel="stylesheet" href="css/dashboard/mescoms.blade.css">
     <div id="page">
         @if(count($commentaires) > 0)
             <ul>

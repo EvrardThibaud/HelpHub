@@ -17,4 +17,8 @@ class ThematiqueAction extends Model
         'idaction',
         'idthematique',
     ];
+
+    public function thematique() {
+        return $this->belongsTo(Thematique::class, 'idthematique', 'idthematique');
+    }
 }
