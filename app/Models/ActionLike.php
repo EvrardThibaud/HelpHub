@@ -16,6 +16,10 @@ class ActionLike extends Model
 
     protected $fillable = ['idaction', 'idutilisateur'];
 
+    public function association()
+    {
+        return $this->belongsTo(Association::class, 'idassociation');
+    }
    
 
     

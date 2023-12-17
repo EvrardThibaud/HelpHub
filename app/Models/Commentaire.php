@@ -25,9 +25,17 @@ class Commentaire extends Model
     {
         return $this->belongsTo(Media::class, 'idmedia', 'idmedia');
     }
+    public function utilisateur()
+    {
+        return $this->belongsTo(User::class, 'idutilisateur', 'idutilisateur');
+    }
+    public function action()
+    {
+        return $this->belongsTo(Action::class, 'idaction', 'idaction');
+    }
 
     public function like()
-{
-    return $this->hasMany(Like::class, 'idcommentaire', 'idcommentaire');
-}
+    {
+        return $this->hasMany(Like::class, 'idcommentaire', 'idcommentaire');
+    }
 }

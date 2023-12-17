@@ -12,7 +12,7 @@
             @csrf
 
             @if(session('error'))
-            <div class="alert">
+            <div class="message">
                 {{ session('error') }}
             </div>
             @endif

@@ -12,10 +12,13 @@ use App\Models\DemandeBenevolat;
 use App\Models\DemandeDon;
 use App\Models\Information;
 use App\Models\Thematique;
-use Illuminate\Http\Request;
+use App\Models\HistoriqueVisu;
 use App\Models\Action;
 use App\Models\ActionLike;
 use App\Models\Adresse;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class ActionController extends Controller
 {
@@ -23,6 +26,43 @@ class ActionController extends Controller
     	return view ("welcome", ['actions'=>Action::all() ]);
     }
 
+    private function gererVisualisations($userId, $id) {
+        $existingVisus = HistoriqueVisu::where('idutilisateur', $userId)->orderBy('numerovisu')->get();
+    
+        $existingIdActions = $existingVisus->pluck('idaction')->toArray();
+    
+        if (!in_array($id, $existingIdActions)) {
+            $existingVisusCount = $existingVisus->count();
+    
+            if ($existingVisusCount === 0) {
+                HistoriqueVisu::create([
+                    'idaction' => $id,
+                    'idutilisateur' => $userId,
+                    'numerovisu' => 1,
+                ]);
+            } else if ($existingVisusCount === 1) {
+                HistoriqueVisu::where('idutilisateur', $userId)->where('numerovisu', 1)->update(['numerovisu' => 2]);
+                HistoriqueVisu::create([
+                    'idaction' => $id,
+                    'idutilisateur' => $userId,
+                    'numerovisu' => 1,
+                ]);
+            } else {
+                HistoriqueVisu::where('idutilisateur', $userId)->where('numerovisu', 3)->delete();
+                HistoriqueVisu::where('idutilisateur', $userId)->where('numerovisu', 2)->update(['numerovisu' => 3]);
+                HistoriqueVisu::where('idutilisateur', $userId)->where('numerovisu', 1)->update(['numerovisu' => 2]);
+    
+                HistoriqueVisu::create([
+                    'idaction' => $id,
+                    'idutilisateur' => $userId,
+                    'numerovisu' => 1,
+                ]);
+            }
+        }
+    }
+    
+
+    //affichage d'un seule action sur la page action
     public function one(Request $request){
         $id = $request->query('id');
         if (!is_numeric($id)) {
@@ -38,8 +78,13 @@ class ActionController extends Controller
         ->where('action.idaction', $id)
         ->first();
         
+        // Ajout de l'enregistrement HistoriqueVisu
+        if (Auth::check()) {
+            $userId = auth()->user()->idutilisateur;
 
-        
+            $this->gererVisualisations($userId, $id);
+        }
+
 
 
     	return view (
@@ -89,7 +134,8 @@ class ActionController extends Controller
         ->leftJoin('demandebenevolat', 'action.idaction', '=', 'demandebenevolat.idaction')
         ->leftJoin('adresse', 'demandebenevolat.codepostaladresse', '=', 'adresse.codepostaladresse')
         ->leftJoin('departement', 'adresse.numdepartement', '=', 'departement.numdepartement')
-        ->where('action.valideparservice', true);
+        ->where('action.valideparservice', true)
+        ->where('action.visible', true);
 
 
 
@@ -171,7 +217,9 @@ class ActionController extends Controller
         $actions = $query = Action::orderByDesc('datepublicationaction')->take(3)
         ->join('association', 'action.idassociation', '=', 'association.idassociation')
         ->leftJoin('media', 'action.idmedia', '=', 'media.idmedia')
-        ->where('action.valideparservice', true)->get();
+        ->where('action.valideparservice', true)
+        ->where('action.visible', true)
+        ->get();
     	return view ("welcome", [
             'actions'=>$actions,
             'thematiques'=>Thematique::all() ,
@@ -229,4 +277,28 @@ class ActionController extends Controller
         }
     }
     
+    public function rendreInvisible(Request $request)
+    {
+        $actionId = $request->input('action_id');
+        $visible = false;
+        
+        $UpdateDetails = Action::where('idaction', '=',  $actionId)->first();
+        $UpdateDetails->visible = $visible;
+        $UpdateDetails->save();
+
+        return redirect()->back()->with('success', 'Cette action est maintenant invisible.');
+    }
+
+    public function rendreVisible(Request $request)
+    {
+        $actionId = $request->input('action_id');
+        $visible = true;
+        
+        $UpdateDetails = Action::where('idaction', '=',  $actionId)->first();
+        $UpdateDetails->visible = $visible;
+        $UpdateDetails->save();
+
+        return redirect()->back()->with('success', 'Cette action est maintenant visible.');
+    }
+
 }

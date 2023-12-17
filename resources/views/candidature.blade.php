@@ -2,6 +2,12 @@
 <link rel="stylesheet" href="css/candidature.blade.css">
 <div id="content">
 
+    @if(session('message'))
+    <div class="alert">
+        {{ session('message') }}
+    </div>
+    @endif
+
         <div id="info">
 
             <h1>Inscription à une Action Bénévole</h1>
@@ -14,59 +20,46 @@
 
         </div>
 
-        <form action="{{ route('candidature') }}" method="get">
+        <form action="{{ route('creerCandidature') }}" method="post">
         @csrf
         
             <input type="hidden" value="{{ $id }}" name="idaction">
+
             <div class="input_div">
-                <label for="gender">Civilité</label>
-                <select name="gender"> 
-                    <option value="none">Veuillez choisir votre genre</option>
-                    <option value="homme">Homme</option>
-                    <option value="femme">Femme</option>
-                    <option value="femme">Autre</option>
+            <label for="civilite">Civilité</label>
+                <select name="civilite" >
+                <option value="" disabled selected>Renseigner ce champ</option>
+
+                    @foreach ($civilites as $civilite)
+                        @if($civilite->idcivilite != 1)
+                            <option value="{{ $civilite->idcivilite }}" {{ $user->idcivilite == $civilite->idcivilite ? 'selected' : '' }}>
+                                {{ $civilite->libellecivilite }}
+                            </option>
+                        @endif
+                    @endforeach
                 </select>
+                <x-input-error :messages="$errors->get('civilite')" class="alert" />
             </div>
 
 
             <div class="input_div">
-                <label for="dob">Date de Naissance*</label>
-                <input type="date" id="dob" name="dob" required>
+                <label for="datenaissance">Date de Naissance</label>
+                <input type="date" id="datenaissance" name="datenaissance" value="{{ $user->datenaissance ?? '' }}" required>
+                <x-input-error :messages="$errors->get('date')" class="alert" />
             </div>
 
-            <!-- <div class="input_div" id="parental_agreement_div">
-                <label for="parental_agreement">Accord Parental (moins de 18 ans)</label>
-                <input type="file" onchange="checkAge()" id="parental_agreement" name="parental_agreement">
-            </div> -->
+           
 
             <div class="input_div">
                 <label for="motivation">Motivation</label>
                 <textarea name="motivation" required></textarea>
+                <x-input-error :messages="$errors->get('motivation')" class="alert" />
             </div>
 
             <input type="submit" id="submit_button" value="S'inscrire">
         </form>
 
-        <!-- <script>
-            function checkAge() {
-                var dobInput = document.getElementById('dob');
-                var parentalAgreementDiv = document.getElementById('parental_agreement_div');
-                var parentalAgreementInput = document.getElementById('parental_agreement');
-                var submitButton = document.getElementById('submit_button');
-
-                // Récupérer la date de naissance
-                var dob = new Date(dobInput.value);
-
-                // Calculer l'âge
-                var age = new Date().getFullYear() - dob.getFullYear();
-
-                // Afficher ou masquer le champ d'accord parental en fonction de l'âge
-                parentalAgreementDiv.style.display = age < 18 ? 'block' : 'none';
-
-                // Activer ou désactiver le bouton de soumission en fonction de l'âge
-                submitButton.disabled = age < 18 && parentalAgreementInput.value.trim() === '';
-            }
-        </script>-->
+        
     
 </div>
 @include('includes.footer')

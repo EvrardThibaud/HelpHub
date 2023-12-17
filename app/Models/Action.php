@@ -17,6 +17,8 @@ class Action extends Model
         'idassociation',
         'descriptionaction',
         'idmedia',
+        'sourdine',
+        'motcles',
     ];
 
     public function media() {

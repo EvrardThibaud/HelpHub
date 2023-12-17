@@ -23,15 +23,13 @@
 #div_form_recherche h2{
     margin: 10px;
     text-align: center;
-    width: 15vw;
-   
 }
 
 /* ----  Form ---- */
 
 
 #div_form_recherche #form_recherche_association{
-    width: 20vw     ;
+    /* width: 20vw     ; */
 
     display: flex;
     justify-content: space-around;
@@ -43,6 +41,10 @@
 }
 
 /* ----  Input ---- */
+
+input{
+    max-width: 20vw;
+}
 
 #lieu{
     display: flex;

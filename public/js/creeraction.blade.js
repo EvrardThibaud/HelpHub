@@ -221,3 +221,41 @@ document.addEventListener('DOMContentLoaded', function() {
             input.value = 'Aucune';
         }
     }
+
+// =====================================================================================
+// =====================================================================================
+//                                    mot cle benevolat
+// =====================================================================================
+// =====================================================================================
+
+
+
+let submitbenevolat = document.querySelector('#submitmotclebenevolat');
+let tabmotclebenevolat = []
+submitbenevolat.addEventListener('click', () => {
+    let parentbenevolat = document.querySelector('#lesmotclesbenevolat');
+    let inputbenevolat = document.querySelector('#motclesbenevolat');
+    let valuebenevolat = document.querySelector('#letmotclebenevolat');
+    if (valuebenevolat.value.trim() != '') {
+        tabmotclebenevolat.push(valuebenevolat.value)
+        addMotCle(parentbenevolat, inputbenevolat, valuebenevolat.value, tabmotclebenevolat)
+        valuebenevolat.value = "";
+    }
+});
+
+function addMotClebenevolat(parent, input, motcle, tab){
+    let div = document.createElement('div');
+    div.classList.add("motcle");
+    div.innerHTML = motcle;
+    div.addEventListener('click', removeMotcle());
+    parent.appendChild(div);
+    input.value = ""
+    tab.forEach(element => {
+        input.value += element + " "
+    });
+    div.addEventListener("click", () => {
+        removeMotcle(div, input.value, tab)
+        div.remove()
+
+    })
+}

@@ -1,0 +1,53 @@
+#candidatures_div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#candidature{
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    
+    min-width: 400px;
+    max-width: 400px;
+    min-height: 200px;
+    max-height: 200px;
+
+    padding: 10px;
+
+    border: 1px solid #171a2e;
+}
+
+#action_name{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #171a2e;
+    height: 40px;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+}
+
+
+#candidature a{
+    width: 100%;
+    color: black;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 50px;
+    transition-duration: 0.2s;
+}
+
+#candidature a:hover
+{
+    background-color: rgba(218, 215, 215, 0.7);
+    opacity: 1;
+    letter-spacing: 0.7px;
+
+}

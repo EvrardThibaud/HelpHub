@@ -30,6 +30,8 @@ class User extends Authenticatable
         'password',
         'newsletter',
         'notification',
+        'idcivilite',
+        'datenaissance',
     ];
 
     /**
@@ -72,13 +74,33 @@ class User extends Authenticatable
 
     public function servicediffusion()
     {
-        return $this->belongsTo(
-            ServiceDiffusion::class, 'idservicediffusion', 'idservicediffusion'
-        );
+        return $this->belongsTo(ServiceDiffusion::class, 'idservicediffusion', 'idservicediffusion');
+    }
+
+    public function historiquevisu()
+    {
+        return $this->hasMany(HistoriqueVisu::class, 'idutilisateur', 'idutilisateur')->orderBy('numerovisu', 'asc');
     }
 
     public function actionLike()
     {
         return $this->hasOne(ActionLike::class, 'idutlisateur', 'idutlisateur');
     }
+
+    public function civilite()
+    {
+        return $this->hasOne(Civilite::class, 'idcivilite', 'idcivilite');
+    }
+
+    public function participationdon()
+    {
+        return $this->belongsTo(ParticipationDon::class, 'idutilisateur', 'idutilisateur');
+    }
+    public function participationbenevole()
+    {
+        return $this->belongsTo(ParticipationBenevolat::class, 'idutilisateur', 'idutilisateur');
+    }
+
+   
+    
 }

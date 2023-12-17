@@ -33,7 +33,8 @@ class AuthenticatedSessionController extends Controller
         if (Auth::guard('web')->attempt($credentials)) {
             // Authentification réussie pour les utilisateurs
             $request->session()->regenerate();
-            return redirect()->route('dashboard');
+
+            return redirect()->intended(RouteServiceProvider::HOME);
         }
 
         // Redirection en cas d'échec de l'authentification
@@ -77,5 +78,7 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }
+
+ 
     
 }

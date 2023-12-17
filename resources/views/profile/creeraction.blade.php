@@ -85,6 +85,27 @@
                             <x-input-error :messages="$errors->get('nombreparticipantdb')" class="alert" />
                         </div>
 
+                        <!-- Image -->
+                        <div class="media">
+                            <x-input-label for="media" :value="__('Objectif de participant :')" />
+                            <x-text-input id="media" class="" type="file" name="media" :value="old('media')"  />
+                            <x-input-error :messages="$errors->get('media')" class="alert" />
+                        </div>
+
+                        <!-- Mot cles -->
+                        <div class="input_div">
+                            <x-input-label for="motcles" :value="__('Mot clés :')" />
+                            <x-text-input id="motclesbenevolat" class="" type="text" name="motcles" :value="old('motcles')" required autofocus autocomplete="motcles"/>
+                            <div id="lesmotclesbenevolat" class="lesmotcles">
+                            
+                            </div>
+                            <div id="formbenevolatmotcle" class="flex">
+                                <input id="letmotclebenevolat" type="text">
+                                <p id="submitmotclebenevolat" type="submit">+</p>
+                            </div>
+                            <x-input-error :messages="$errors->get('motcles')" class="alert" />
+                        </div>
+
                         <!-- Thematiques -->
                         <div id="newsletter_div">
                             <div id="them_benevolat">

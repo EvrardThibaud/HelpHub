@@ -3,6 +3,12 @@
 <x-app-layout>
 
     <div id="page">
+        @if(session('message'))
+            <script>
+                var message = '{{ session('message') }}';
+                createToast('valid', message)
+            </script>
+        @endif
         <h1>Demandes d'action</h1>
         <p>Ici vous pouvez traiter les demandes d'action.</p>
         <div id="content">

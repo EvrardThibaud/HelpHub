@@ -5,6 +5,12 @@
 <x-app-layout>
 
     <div id="page">
+        @if(session('message'))
+            <script>
+                var message = '{{ session('message') }}';
+                createToast('valid', message)
+            </script>
+        @endif
         <h1>Mes actions</h1>
         <div id="content">
 
@@ -21,10 +27,11 @@
                                 <h4 id="pasvalidetexte">L'action n'a pas encore été validée.</h4>
                             @else
                                 <div id="modifier_ou_supprimer" class="flex">
-                                    <!-- <form method="GET" action=" route('confirmsuppr', ['id' => $action->idaction]) ">
+                                    <form method="GET" action="{{route('profile.modifaction')}}">
                                         @csrf
+                                        <input type="hidden" name="id" value="{{$action->idaction}}">
                                         <button id="modifier" type="submit">Modifier</button>
-                                    </form> -->
+                                    </form>
                                     
                                     <button class="supprimer" data-action="{{ $action }}" type="text">Supprimer</button>
                                     

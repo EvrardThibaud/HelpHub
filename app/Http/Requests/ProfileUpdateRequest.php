@@ -25,7 +25,9 @@ class ProfileUpdateRequest extends FormRequest
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
             'numtelephone' => ['required', 'numeric','digits:10'],
             'rue' => ['required', 'string', 'max:100'],
-            'codepostaladresse' => ['required', 'numeric', 'digits:5']
+            'codepostaladresse' => ['required', 'numeric', 'digits:5'],
+            'idcivilite' => ['required'],
+            'datenaissance' => ['required']
         ];
     }
 }

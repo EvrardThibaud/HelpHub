@@ -24,6 +24,6 @@ class SignalementCommentaire extends Model
     }    
     
     public function utilisateur() {
-        return $this->belongsTo(Utilisateur::class, 'idutilisateur', 'idutilisateur');
+        return $this->belongsTo(User::class, 'idutilisateur', 'idutilisateur');
     }
 }

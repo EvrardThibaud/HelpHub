@@ -1,0 +1,19 @@
+section{
+    background: linear-gradient(0deg, #0d0f1a 0%, #171a2e 50%);
+    margin: 10px;
+    min-height: 70vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+section h1{
+    color: white;
+    width: 20vw;
+}
+
+section label{
+    color: white
+}
+

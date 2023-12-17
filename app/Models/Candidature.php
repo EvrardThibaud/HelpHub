@@ -11,6 +11,7 @@ class Candidature extends Model
 
     protected $table = 'candidature';
     protected $primaryKey = 'idcandidature';
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +23,16 @@ class Candidature extends Model
         'idaction',
         'idutilisateur',
         'informationscandidature',
-        'datenaissance',
         'civilite'
     ];
+
+    public function etatCandidature()
+    {
+        return $this->hasOne(EtatCandidature::class, 'idetatcandidature', 'idetatcandidature');
+    }
+
+    public function action()
+    {
+        return $this->hasOne(Action::class, 'idaction', 'idaction');
+    }
 }

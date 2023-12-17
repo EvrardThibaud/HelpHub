@@ -13,11 +13,12 @@
 <body>
     @include('includes.header')
 
-    @if(session('message'))
-    <div class="message">
-        {{ session('message') }}
-    </div>
-    @endif
+        @if(session('message'))
+            <script>
+                var message = '{{ session('message') }}';
+                createToast('valid', message)
+            </script>
+        @endif
     
     @if($action)
         <div id="titre_div">
@@ -25,6 +26,7 @@
         </div> 
         <main>
             <div id="container_left">
+                
                 <div id="action_div">
                     <p id="asso_action">Action proposée par <a href="/association?id={{ $action->idassociation }}">{{ $action->nomassociation }}</a> </p>
                     <p id="description_action">{{ $action->descriptionaction }}</p>
@@ -166,7 +168,7 @@
                             <li>{{$thematique->thematique->libellethematique}}</li>
                         @endforeach
                     </ul>
-                    <form action="{{ route('candidature') }}" method="post">
+                    <form action="{{ route('formulaireCandidature') }}" method="get">
                         @csrf
                         <input type="hidden" name="idaction" value="{{$action->idaction}}">
                         <input type="submit" class="bt" value="Participer à l'action">

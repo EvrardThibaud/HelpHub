@@ -1,32 +1,57 @@
-#comment {
-    position: relative;
-    box-sizing: border-box;
-    padding: 15px;
-    margin: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f8f9fa;
-    color: #333;
+#comments_div{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-#comment li {
-    margin-bottom: 10px;
+#comment{
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    
+    min-width: 400px;
+    max-width: 400px;
+    min-height: 200px;
+    max-height: 200px;
+
+    padding: 10px;
+
+    border: 1px solid #171a2e;
 }
 
-#comment button {
-    padding: 8px 12px;
+#action_name{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #171a2e;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    height: 40px;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
 }
 
-#comment button:hover {
-    opacity: 0.8;
+#nblike{
+    color: black
 }
 
-#comment strong {
-    font-weight: bold; /* Ajout du style en gras */
+
+#comment a{
+    width: 100%;
+    color: black;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 50px;
+    transition-duration: 0.2s;
+}
+
+#comment a:hover
+{
+    background-color: rgba(218, 215, 215, 0.7);
+    opacity: 1;
+    letter-spacing: 0.7px;
+
 }

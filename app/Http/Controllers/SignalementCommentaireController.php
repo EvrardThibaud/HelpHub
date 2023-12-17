@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SignalementCommentaire;
 use App\Models\Commentaire;
 use App\Models\Action;
+use App\Models\Like;
 
 class SignalementCommentaireController extends Controller
 {
@@ -48,6 +49,23 @@ class SignalementCommentaireController extends Controller
             return redirect()->route('login')->with('error', 'Vous devez être connecté pour signaler un commentaire.');
         }
     }
+
+    public function refusersignalement(Request $request)
+    {
+        $id = $request->idsignalement;
+        SignalementCommentaire::where('idsignalement', $id)->delete();
+        return redirect()->back()->with('message', 'Vous avez refusé le signalement.');
+    }
+    public function acceptersignalement(Request $request)
+    {
+        $idcommentaire = $request->idcommentaire;
+        $idsignalement = $request->idsignalement;
+        SignalementCommentaire::where('idcommentaire', $idcommentaire)->delete();
+        Like::where('idcommentaire', $idcommentaire)->delete();
+        Commentaire::where('idcommentaire', $idcommentaire)->delete();
+        return redirect()->back()->with('message', 'Vous avez supprimé le commentaire.');
+    }
+
     // public function showMessage(Request $request)
     // {
     //     $utilisateurId = $request->query('utilisateurId');

@@ -1,0 +1,44 @@
+#page{
+    background: linear-gradient(0deg, #0d0f1a 0%, #171a2e 50%);;
+}
+
+#identite_bancaire_div, #carte_bancaire_div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+}
+
+h1{
+    width: 20vw;
+    color: white;
+}
+
+label{
+    color: white;
+}
+
+#form_identite_bancaire, #form_carte_bancaire{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-width: 250px;
+    min-width: 250px;
+}
+
+.input_div input{
+    max-width: 200px;
+    min-width: 200px;
+    
+}
+
+.sumbit_delete_button{
+    margin-top: 2px;
+}
+
+
+
+
+
+
+

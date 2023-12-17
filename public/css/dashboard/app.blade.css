@@ -36,15 +36,21 @@
   #leftsection{
     background-color: red;
     width: 70vw;
+    min-height: 80vh;
   }
 
   #rightsection{
     background-color: green;
     width: 30vw;
-    height: 80vh;
+    min-height: 80vh;
   }
 
 
   .flex{
     display: flex;
+  }
+
+  #container_action{
+    flex-wrap: wrap;
+    justify-content: space-around;
   }

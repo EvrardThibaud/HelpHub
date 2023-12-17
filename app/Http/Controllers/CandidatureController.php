@@ -20,26 +20,29 @@ use App\Models\ThematiqueAction;
 use App\Models\ParticipationDon;
 use App\Models\Association;
 use App\Models\Thematique;
+use App\Models\Candidature;
+use App\Models\Civilite;
+use App\Models\User;
 
 class CandidatureController extends Controller
 {
-    public function creerCandidature(Request $request): RedirectResponse
+    public function creerCandidature(Request $request)
     {
-
         $request->validate([
-            'civilite' => ['required', 'string', 'max:50'],
-            'datenaissance' => ['required'],
-            'informationscandidature' => ['required', 'string', 'max:400'],
+            'civilite' => 'required|not_in:0', // Vérifie que la valeur n'est pas 0 (la valeur vide)
+            
         ]);
         
 
         $candidature = Candidature::create([
             'idaction' => $request->idaction,
+            'idetatcandidature' => 1,
             'idutilisateur' => auth()->user()->idutilisateur,
-            'civilite' => $request->civilite,
-            'datenaissance' => $request->datenaissance,
-            'informationscandidature' => $request->informationscandidature,
+            'informationscandidature' => $request->motivation,
         ]);
+
+        User::where('idutilisateur', auth()->user()->idutilisateur)->update(['idcivilite' => $request->civilite]);
+        User::where('idutilisateur', auth()->user()->idutilisateur)->update(['datenaissance' => $request->datenaissance]);
 
         return redirect()->back()->with('message', 'Candidature ajoutée avec succès!');
     }
@@ -48,8 +51,11 @@ class CandidatureController extends Controller
     {
         $id = $request->idaction;
         return view('candidature', [
-            'id' => $id
+            'id' => $id,
+            'user' => $request->user(),
+            'civilites'=>Civilite::All(),
         ]);
     }
+    
 
 }

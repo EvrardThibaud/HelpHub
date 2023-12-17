@@ -11,4 +11,8 @@ class Thematique extends Model
     protected $table = "thematique";
     protected $primaryKey = "idthematique";
     public $timestamps = false;
+
+    protected $fillable = [
+        'libellethematique'
+    ];
 }

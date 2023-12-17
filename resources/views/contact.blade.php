@@ -10,15 +10,15 @@
 <body>
 
     @include('includes.header')
+    <h1>Contactez le délégué à la protection des données</h1>
 
     <div id="content">
 
-        <div id="info">
-
-            <h1>Contactez le délégué à la protection des données</h1>
+        <div id="info">            
 
             <p>
-                Ce formulaire ne doit pas être utilisé si votre demande concerne un autre organisme que HepHub (ex : opposition à recevoir de la publicité, déréférencement d'un contenu internet, etc.). </p> <p>Dans ce cas, utilisez notre service d'aide en ligne pour obtenir une réponse immédiate.
+               
+            Ce formulaire ne doit pas être utilisé si votre demande concerne un autre organisme que HepHub (ex : opposition à recevoir de la publicité, déréférencement d'un contenu internet, etc.). </p> <p>Dans ce cas, utilisez notre service d'aide en ligne pour obtenir une réponse immédiate.
             </p>
 
             <p>Les champs marqués d'un astérisque (*) sont obligatoires</p>

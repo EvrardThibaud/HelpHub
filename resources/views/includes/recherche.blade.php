@@ -29,7 +29,7 @@
         </div>
 
         <!-- Date -->
-        <div id="date">
+        <div id="date" class="input_div">
             <!-- <h3>Date</h3> -->
             <p>Trier par date :</p>
 

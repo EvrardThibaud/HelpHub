@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Models\Action;
 use App\Models\Association;
 use App\Models\Commentaire;
@@ -11,7 +12,9 @@ use App\Models\ParticipationBenevolat;
 use App\Models\ParticipationDon;
 use App\Models\DemandeBenevolat;
 use App\Models\DemandeDon;
+use App\Models\HistoriqueVisu;
 use App\Models\Information;
+use App\Models\Media;
 use App\Models\Thematique;
 use App\Models\Adresse;
 use Illuminate\Http\Request;
@@ -35,8 +38,8 @@ class ActionCreationController extends Controller
         
         $request->validate([
             'titreaction' => ['required', 'string', 'max:255'],
-            'descriptionaction' => ['required', 'string', 'max:255'],
-
+            'descriptionaction' => ['required', 'string', 'max:7000'],
+            'media' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'competencesrequisesdb' => ['required', 'string', 'max:255'],
             'rue' => ['required', 'string', 'max:100'],
             'codepostaladresse' => ['required', 'int',"digits:5"],
@@ -50,19 +53,39 @@ class ActionCreationController extends Controller
             // Si l'adresse n'existe pas, créez-la
             $adresse = Adresse::create([
                 'codepostaladresse' => $request->codepostaladresse,
-                'villeadresse' => $request->villeadresse, // Assurez-vous d'avoir la valeur de la ville dans la requête
+                'villeadresse' => $request->rue, // Assurez-vous d'avoir la valeur de la ville dans la requête
                 'numdepartement' => substr($request->codepostaladresse, 0, 2), // Adapter selon le format de vos codes postaux
                 'coordonneex' => $request->coordonnex,
                 'coordonneey' => $request->coordonney,
             ]);
         }
 
+        if ($request->hasFile('media')) {
+            if ($request->hasFile('media')) {
+                $media = new Media(); // Assurez-vous d'ajuster selon votre modèle
+        
+                // Ajoutez le fichier à la collection 'images'
+                $media->addMedia($request->file('media'))->toMediaCollection('images');
+        
+                // Vous pouvez également enregistrer d'autres informations dans votre modèle ici
+                // $media->title = $request->input('title');
+                // $media->description = $request->input('description');
+                // $media->save();
+        
+                return response()->json(['message' => 'Media uploaded successfully']);
+            }
+        
+            return response()->json(['error' => 'No file provided'], 400);
+        }       
+
         $action = Action::create([
             'titreaction' => $request->titreaction,
             'descriptionaction' => $request->descriptionaction,
             'idassociation' => auth()->user()->association->idassociation,
+            'motcles' => $request->motcles,
             'valideparservice' => false,
         ]);
+
 
         $demandebenevolat = DemandeBenevolat::create([
             'idaction' => $action->idaction,
@@ -91,13 +114,116 @@ class ActionCreationController extends Controller
         return redirect()->route('profile.mesactions');
     }
 
+    public function modifbenevolat(Request $request)
+    {
+
+        
+        $request->validate([
+            'titreaction' => ['required', 'string', 'max:255'],
+            'descriptionaction' => ['required', 'string', 'max:7000'],
+            'media' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'competencesrequisesdb' => ['required', 'string', 'max:255'],
+            'rue' => ['required', 'string', 'max:100'],
+            'codepostaladresse' => ['required', 'int',"digits:5"],
+            'nombreparticipantdb' => ['required', 'integer'],
+        ]);
+        
+        // Vérifier si l'adresse existe pour le code postal donné
+        $adresse = Adresse::where('codepostaladresse', $request->codepostaladresse)->first();
+
+        if (!$adresse) {
+            // Si l'adresse n'existe pas, créez-la
+            $adresse = Adresse::create([
+                'codepostaladresse' => $request->codepostaladresse,
+                'villeadresse' => $request->rue, // Assurez-vous d'avoir la valeur de la ville dans la requête
+                'numdepartement' => substr($request->codepostaladresse, 0, 2), // Adapter selon le format de vos codes postaux
+                'coordonneex' => $request->coordonnex,
+                'coordonneey' => $request->coordonney,
+            ]);
+        }
+
+        if ($request->hasFile('media')) {
+            if ($request->hasFile('media')) {
+                $media = new Media(); // Assurez-vous d'ajuster selon votre modèle
+        
+                // Ajoutez le fichier à la collection 'images'
+                $media->addMedia($request->file('media'))->toMediaCollection('images');
+        
+                // Vous pouvez également enregistrer d'autres informations dans votre modèle ici
+                // $media->title = $request->input('title');
+                // $media->description = $request->input('description');
+                // $media->save();
+        
+                return response()->json(['message' => 'Media uploaded successfully']);
+            }
+        
+            return response()->json(['error' => 'No file provided'], 400);
+        }       
+
+        $action = Action::find($request->idaction);
+        $action->titreaction = $request->titreaction;
+        $action->descriptionaction = $request->descriptionaction;
+        $action->motcles = $request->motcles;
+        $action->valideparservice = false;
+
+        $demandebenevolat = DemandeBenevolat::find($request->idaction);
+        $demandebenevolat->codepostaladresse = $request->codepostaladresse;
+        $demandebenevolat->competencesrequisesdb = $request->competencesrequisesdb;
+        $demandebenevolat->nombreparticipantdb = $request->nombreparticipantdb;
+        $demandebenevolat->estpresentieldb = $request->estpresentieldb;
+
+
+        // Récupérer les ID des thématiques de la requête
+        $requestedThematiques = [];
+        $thematiques = Thematique::all();
+        foreach ($thematiques as $thematique) {
+            $checkboxName = 'thematique_' . $thematique->idthematique;
+            if ($request->has($checkboxName)) {
+                $requestedThematiques[] = $thematique->idthematique;
+            }
+        }
+
+        // Récupérer les relations existantes pour cette action
+        $existingThematiqueActions = ThematiqueAction::where('idaction', $action->idaction)->get();
+
+        $thematiquesToDelete = $existingThematiqueActions
+        ->whereNotIn('idthematique', $requestedThematiques)
+        ->pluck('idthematique'); // Supposons que 'id' soit la clé primaire de ThematiqueAction
+    
+        // Supprimer les ThematiqueAction correspondantes
+        ThematiqueAction::whereIn('idthematique', $thematiquesToDelete)->delete();
+        
+
+        // Ajouter de nouvelles relations pour les thématiques manquantes
+        foreach ($requestedThematiques as $requestedThematique) {
+            $existingRelation = ThematiqueAction::where('idaction', $action->idaction)
+                                                ->where('idthematique', $requestedThematique)
+                                                ->first();
+            // Si la relation n'existe pas, crée-la
+            if (!$existingRelation) {
+                ThematiqueAction::create([
+                    'idaction' => $action->idaction,
+                    'idthematique' => $requestedThematique,
+                ]);
+            }
+        }
+
+        $demandebenevolat->adresse()->associate($adresse);
+        $demandebenevolat->save();
+        $action->save();
+
+
+        return redirect()->route('profile.mesactions')->with('message', "Vous avez modifié cette action.");
+
+    }
+
     public function creerdon(Request $request): RedirectResponse
     {
 
         
         $request->validate([
             'titreaction' => ['required', 'string', 'max:255'],
-            'descriptionaction' => ['required', 'string', 'max:255'],
+            'descriptionaction' => ['required', 'string', 'max:7000'],
 
             'ribdon' => ['required', 'string', 'max:255'],
             'objectifdon' => ['required', 'integer'],
@@ -107,6 +233,7 @@ class ActionCreationController extends Controller
         $action = Action::create([
             'titreaction' => $request->titreaction,
             'descriptionaction' => $request->descriptionaction,
+            'motcles' => $request->motcles,
             'idassociation' => auth()->user()->association->idassociation,
             'valideparservice' => false,
         ]);
@@ -115,7 +242,6 @@ class ActionCreationController extends Controller
             'idaction' => $action->idaction,
             'ribdon' => $request->ribdon,
             'objectifdon' => $request->objectifdon,
-            'argentrecoltedon' => 0,
             'avantagefiscal' => $request->avantagefiscal,
         ]);
 
@@ -135,19 +261,88 @@ class ActionCreationController extends Controller
         return redirect()->route('profile.mesactions');
     }
 
+    public function modifdon(Request $request)
+    {
+
+        
+        $request->validate([
+            'titreaction' => ['required', 'string', 'max:255'],
+            'descriptionaction' => ['required', 'string', 'max:7000'],
+
+            'ribdon' => ['required', 'string', 'max:255'],
+            'objectifdon' => ['required', 'integer'],
+        ]);
+        
+        $action = Action::find($request->idaction);
+        
+        $action->titreaction = $request->titreaction;
+        $action->motcles = $request->motcles;
+        $action->descriptionaction = $request->descriptionaction;
+        $action->valideparservice = false;
+
+        $demandedon = DemandeDon::find($request->idaction);
+        $demandedon->ribdon = $request->ribdon;
+        $demandedon->objectifdon = $request->objectifdon;
+        $demandedon->avantagefiscal = $request->avantagefiscal;
+
+
+        // Récupérer les ID des thématiques de la requête
+        $requestedThematiques = [];
+        $thematiques = Thematique::all();
+        foreach ($thematiques as $thematique) {
+            $checkboxName = 'thematique_' . $thematique->idthematique;
+            if ($request->has($checkboxName)) {
+                $requestedThematiques[] = $thematique->idthematique;
+            }
+        }
+
+        // Récupérer les relations existantes pour cette action
+        $existingThematiqueActions = ThematiqueAction::where('idaction', $action->idaction)->get();
+
+        $thematiquesToDelete = $existingThematiqueActions
+        ->whereNotIn('idthematique', $requestedThematiques)
+        ->pluck('idthematique'); // Supposons que 'id' soit la clé primaire de ThematiqueAction
+    
+        // Supprimer les ThematiqueAction correspondantes
+        ThematiqueAction::whereIn('idthematique', $thematiquesToDelete)->delete();
+        
+
+        // Ajouter de nouvelles relations pour les thématiques manquantes
+        foreach ($requestedThematiques as $requestedThematique) {
+            $existingRelation = ThematiqueAction::where('idaction', $action->idaction)
+                                                ->where('idthematique', $requestedThematique)
+                                                ->first();
+            // Si la relation n'existe pas, crée-la
+            if (!$existingRelation) {
+                ThematiqueAction::create([
+                    'idaction' => $action->idaction,
+                    'idthematique' => $requestedThematique,
+                ]);
+            }
+        }
+
+        $demandedon->save();
+        $action->save();
+
+
+        return redirect()->route('profile.mesactions')->with('message', "Vous avez modifié cette action.");
+
+    }
+
     public function creerinformation(Request $request): RedirectResponse
     {
 
         
         $request->validate([
             'titreaction' => ['required', 'string', 'max:255'],
-            'descriptionaction' => ['required', 'string', 'max:255'],
+            'descriptionaction' => ['required', 'string', 'max:7000'],
         ]);
         
 
         $action = Action::create([
             'titreaction' => $request->titreaction,
             'descriptionaction' => $request->descriptionaction,
+            'motcles' => $request->motcles,
             'idassociation' => auth()->user()->association->idassociation,
             'valideparservice' => false,
         ]);
@@ -172,32 +367,90 @@ class ActionCreationController extends Controller
         return redirect()->route('profile.mesactions');
     }
 
-    function accepteraction(Request $request, $id): RedirectResponse
+    public function modifinformation(Request $request): RedirectResponse
+    {
+
+        
+        $request->validate([
+            'titreaction' => ['required', 'string', 'max:255'],
+            'descriptionaction' => ['required', 'string', 'max:7000'],
+        ]);
+        
+
+        $action = Action::find($request->idaction);
+        $action->titreaction = $request->titreaction;
+        $action->motcles = $request->motcles;
+        $action->descriptionaction = $request->descriptionaction;
+        $action->valideparservice = false;
+
+        // Récupérer les ID des thématiques de la requête
+        $requestedThematiques = [];
+        $thematiques = Thematique::all();
+        foreach ($thematiques as $thematique) {
+            $checkboxName = 'thematique_' . $thematique->idthematique;
+            if ($request->has($checkboxName)) {
+                $requestedThematiques[] = $thematique->idthematique;
+            }
+        }
+
+        // Récupérer les relations existantes pour cette action
+        $existingThematiqueActions = ThematiqueAction::where('idaction', $action->idaction)->get();
+
+        $thematiquesToDelete = $existingThematiqueActions
+        ->whereNotIn('idthematique', $requestedThematiques)
+        ->pluck('idthematique'); // Supposons que 'id' soit la clé primaire de ThematiqueAction
+    
+        // Supprimer les ThematiqueAction correspondantes
+        ThematiqueAction::whereIn('idthematique', $thematiquesToDelete)->delete();
+        
+
+        // Ajouter de nouvelles relations pour les thématiques manquantes
+        foreach ($requestedThematiques as $requestedThematique) {
+            $existingRelation = ThematiqueAction::where('idaction', $action->idaction)
+                                                ->where('idthematique', $requestedThematique)
+                                                ->first();
+            // Si la relation n'existe pas, crée-la
+            if (!$existingRelation) {
+                ThematiqueAction::create([
+                    'idaction' => $action->idaction,
+                    'idthematique' => $requestedThematique,
+                ]);
+            }
+        }
+
+        $action->save();
+
+
+        return redirect()->route('profile.mesactions')->with('message', "Vous avez modifié cette action.");
+    }
+
+    function accepteraction(Request $request, $id)
     {
         $action = Action::find($id);
     
         if ($action) {
             $action->valideparservice = true;
             $action->save();
-            return redirect()->back()->with('action_status', 'success_accepter');
+            return redirect()->back()->with('message', "Vous avez accepté cette action.");
         } else {
-            return redirect()->back()->with('action_status', 'error');
+            return redirect()->back()->with('message', 'error');
         }
     }
 
-    function refuseraction(Request $request, $id): RedirectResponse
+    function refuseraction(Request $request, $id)
     {
         $action = Action::find($id);
     
         if ($action) {
             ThematiqueAction::where('idaction', $id)->delete();
+            HistoriqueVisu::where('idaction', $id)->delete();
             DemandeBenevolat::where('idaction', $id)->delete();
             DemandeDon::where('idaction', $id)->delete();
             Information::where('idaction', $id)->delete();
             Action::where('idaction', $id)->delete();
-            return redirect()->back()->with('action_status', 'success_refuser');
+            return redirect()->back()->with('message', "Vous avez refusé cette action.");
         } else {
-            return redirect()->back()->with('action_status', 'error');
+            return redirect()->back()->with('message', 'error');
         }
     }
 
