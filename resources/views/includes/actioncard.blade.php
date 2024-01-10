@@ -5,10 +5,10 @@
     <h4>{{ $action->titreaction }}</h4>
     <ul >
         <div id="image_action_div">
-            @if ($action->image)
-            <img src="{{$action->image}}" alt="" >
+            @if ($action->imagecard)
+                <img src="/storage/{{$action->imagecard->media->image}}" alt="" >
             @else
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Pas_d%27image_disponible.svg/2048px-Pas_d%27image_disponible.svg.png" alt="" >
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Pas_d%27image_disponible.svg/2048px-Pas_d%27image_disponible.svg.png" alt="" >
             @endif
         </div>
         <!-- association -->

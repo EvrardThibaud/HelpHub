@@ -1,0 +1,17 @@
+
+#lesimages{
+    display: block;
+}
+#lesimages img{
+    max-width: 30vw;
+}
+
+#ajoutimage{
+    display: flex;
+    flex-direction: column;
+}
+
+#ajoutimage input{
+    width: 350px;
+
+}

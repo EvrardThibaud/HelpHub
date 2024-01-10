@@ -14,7 +14,7 @@
         <div id="content">
             <div id="form-Bénévolat">
                 <h2>Action de bénévolat</h2>
-                <form id="form_benevolat" method="POST" action="{{ route('creerbenevolat') }}">
+                <form class="form_creation" id="form_benevolat" method="POST" action="{{ route('creerbenevolat') }}" enctype="multipart/form-data">
                     @csrf
 
 
@@ -38,7 +38,7 @@
                         <!-- Adresse -->
                         <div class="input_div">
                             <x-input-label for="adresse" :value="__('Votre adresse :')" />
-                            <x-text-input id="adresse" class="" type="text" placeholder="9 rue de l'arc en ciel" name="rue" :value="old('rue')" required autocomplete="rue"/>
+                            <x-text-input id="adresse" class="" type="text" placeholder="ex: 9 rue de l'arc en ciel" name="rue" :value="old('rue')" required />
                             <input type="text" name="villeadresse" style="display: none;" id="villeadresse" value="">
                             <x-input-error :messages="$errors->get('rue')" class="alert" />
                             
@@ -60,7 +60,7 @@
                         <!-- Code postal -->
                         <div class="input_div">
                             <x-input-label for="codepostaladresse" :value="__('Votre code postal :')" />
-                            <x-text-input id="codepostaladresse" class="" type="text" name="codepostaladresse" :value="old('codepostaladresse')" placeholder="74000" required />
+                            <x-text-input id="codepostaladresse" class="" type="text" name="codepostaladresse" :value="old('codepostaladresse')" placeholder="ex: 74000" required />
                             <x-input-error :messages="$errors->get('codepostaladresse')" class="alert" />
                         </div>
                         <!-- est présentielr -->
@@ -87,21 +87,21 @@
 
                         <!-- Image -->
                         <div class="media">
-                            <x-input-label for="media" :value="__('Objectif de participant :')" />
-                            <x-text-input id="media" class="" type="file" name="media" :value="old('media')"  />
+                            <x-input-label for="media" :value="__('Ajouter une image :')" />
+                            <x-text-input id="media" class="" type="file" name="media"  />
                             <x-input-error :messages="$errors->get('media')" class="alert" />
                         </div>
 
                         <!-- Mot cles -->
                         <div class="input_div">
                             <x-input-label for="motcles" :value="__('Mot clés :')" />
-                            <x-text-input id="motclesbenevolat" class="" type="text" name="motcles" :value="old('motcles')" required autofocus autocomplete="motcles"/>
+                            <x-text-input id="motclesbenevolat" class="" type="hidden" name="motcles" :value="old('motcles')" required autofocus autocomplete="motcles"/>
                             <div id="lesmotclesbenevolat" class="lesmotcles">
                             
                             </div>
                             <div id="formbenevolatmotcle" class="flex">
-                                <input id="letmotclebenevolat" type="text">
-                                <p id="submitmotclebenevolat" type="submit">+</p>
+                                <input placeholder="Mot clé" id="letmotclebenevolat" type="text">
+                                <p id="submitmotclebenevolat" class="boutonsubmitmotcle"  type="submit">+</p>
                             </div>
                             <x-input-error :messages="$errors->get('motcles')" class="alert" />
                         </div>
@@ -133,7 +133,7 @@
 
             <div id="form-Don" class="hide">
                 <h2>Action de don</h2>
-                <form id="form_don" method="POST" action="{{ route('creerdon') }}">
+                <form class="form_creation" id="form_don" method="POST" action="{{ route('creerdon') }}" enctype="multipart/form-data">
                     @csrf
 
 
@@ -176,6 +176,27 @@
                             <x-text-input id="objectifdon" class="" type="text" name="objectifdon" :value="old('objectifdon')" placeholder="100" required />
                             <x-input-error :messages="$errors->get('objectifdon')" class="alert" />
                         </div>
+
+                        <!-- Image -->
+                        <div class="media">
+                            <x-input-label for="media" :value="__('Ajouter une image :')" />
+                            <x-text-input id="media" class="" type="file" name="media"  />
+                            <x-input-error :messages="$errors->get('media')" class="alert" />
+                        </div>
+
+                        <!-- Mot cles -->
+                        <div class="input_div">
+                            <x-input-label for="motcles" :value="__('Mot clés :')" />
+                            <x-text-input id="motclesdon" class="" type="hidden" name="motcles" :value="old('motcles')" required autofocus autocomplete="motcles"/>
+                            <div id="lesmotclesdon" class="lesmotcles">
+                            
+                            </div>
+                            <div id="formdonmotcle" class="flex">
+                                <input placeholder="Mot clé" id="letmotcledon" type="text">
+                                <p id="submitmotcledon" class="boutonsubmitmotcle"  type="submit">+</p>
+                            </div>
+                            <x-input-error :messages="$errors->get('motcles')" class="alert" />
+                        </div>
                         <!-- Thematiques -->
                         <div id="newsletter_div">
                             <div id="them_don">
@@ -204,7 +225,7 @@
 
             <div id="form-Information" class="hide">
                 <h2>Action de information</h2>
-                <form id="form_information" method="POST" action="{{ route('creerinformation') }}">
+                <form class="form_creation"  id="form_information" method="POST" action="{{ route('creerinformation') }}" enctype="multipart/form-data">
                     @csrf
 
 
@@ -224,6 +245,26 @@
                             <x-input-error :messages="$errors->get('descriptionaction')" class="alert" />
                         </div>
 
+                        <!-- Image -->
+                        <div class="media">
+                            <x-input-label for="media" :value="__('Ajouter une image :')" />
+                            <x-text-input id="media" class="" type="file" name="media"  />
+                            <x-input-error :messages="$errors->get('media')" class="alert" />
+                        </div>
+
+                        <!-- Mot cles -->
+                        <div class="input_div">
+                            <x-input-label for="motcles" :value="__('Mot clés :')" />
+                            <x-text-input id="motclesinformation" class="" type="hidden" name="motcles" :value="old('motcles')" required autofocus autocomplete="motcles"/>
+                            <div id="lesmotclesinformation" class="lesmotcles">
+                            
+                            </div>
+                            <div id="forminformationmotcle" class="flex">
+                                <input placeholder="Mot clé" id="letmotcleinformation" type="text">
+                                <p id="submitmotcleinformation" class="boutonsubmitmotcle"  type="submit">+</p>
+                            </div>
+                            <x-input-error :messages="$errors->get('motcles')" class="alert" />
+                        </div>
 
                         <!-- Thematiques -->
                         <div id="newsletter_div">

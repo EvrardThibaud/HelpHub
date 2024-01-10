@@ -8,7 +8,8 @@ let timeoutId;
 let input = document.getElementById('adresse'); // Obtenez votre élément d'input
 
 function getAddress(userInput) {
-    fetch('/get-address-suggestions?input=' + encodeURIComponent(userInput))
+    if(userInput.length >= 3){
+        fetch('https://api-adresse.data.gouv.fr/search/?q=' + encodeURIComponent(userInput) + '&type=street&autocomplete=1&limit=5')
         .then(response => response.json())
         .then(data => {
             let lesadresses = document.getElementById('les_adresses');
@@ -70,6 +71,7 @@ function getAddress(userInput) {
             console.error('Une erreur s\'est produite : ', error);
         });
     }
+}
 
 input.addEventListener('input', function() {
     let userInput = input.value;
@@ -81,7 +83,7 @@ input.addEventListener('blur', () => {
         let lesadresses = document.getElementById('les_adresses');
         lesadresses.style.display = "none"
         lesadresses.innerHTML = ""
-    }, 100); // Ajoute un délai de 200 millisecondes avant de masquer la liste
+    }, 200); // Ajoute un délai de 200 millisecondes avant de masquer la liste
 })
 input.addEventListener('focus', () => {
     clearTimeout(timeoutId); // Réinitialise le délai si l'input redevient en focus
@@ -224,38 +226,55 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // =====================================================================================
 // =====================================================================================
-//                                    mot cle benevolat
+//                                    mot cle
 // =====================================================================================
 // =====================================================================================
 
 
 
-let submitbenevolat = document.querySelector('#submitmotclebenevolat');
-let tabmotclebenevolat = []
-submitbenevolat.addEventListener('click', () => {
-    let parentbenevolat = document.querySelector('#lesmotclesbenevolat');
-    let inputbenevolat = document.querySelector('#motclesbenevolat');
-    let valuebenevolat = document.querySelector('#letmotclebenevolat');
-    if (valuebenevolat.value.trim() != '') {
-        tabmotclebenevolat.push(valuebenevolat.value)
-        addMotCle(parentbenevolat, inputbenevolat, valuebenevolat.value, tabmotclebenevolat)
-        valuebenevolat.value = "";
+function addMotCle(type) {
+    let parent = document.querySelector(`#lesmotcles${type}`);
+    let input = document.querySelector(`#motcles${type}`);
+    let value = document.querySelector(`#letmotcle${type}`);
+    if (value.value.trim() !== '') {
+        let lesMotsCles = document.querySelectorAll(`.${type}`);
+
+        let dejaMotCle = false;
+
+        lesMotsCles.forEach(motcle => {
+            if (motcle.innerHTML.includes(value.value))
+                dejaMotCle = true;
+        });
+
+        if (!dejaMotCle) {
+            let div = document.createElement('div');
+            div.classList.add('motcle');
+            div.innerHTML = value.value;
+            parent.appendChild(div);
+            
+            input.value = input.value + value.value + " ";
+
+            div.addEventListener("click", () => {
+                div.remove();
+                let updatedMotsCles = document.querySelectorAll(`.${type}`);
+                input.value = "";
+                
+                updatedMotsCles.forEach(element => { 
+                    input.value += element.innerHTML + " ";
+                });
+            });
+            
+            value.value = "";
+        }
     }
+}
+
+let types = ['benevolat', 'information', 'don'];
+
+types.forEach(type => {
+    let submit = document.querySelector(`#submitmotcle${type}`);
+    submit.addEventListener('click', () => {
+        addMotCle(type);
+    });
 });
 
-function addMotClebenevolat(parent, input, motcle, tab){
-    let div = document.createElement('div');
-    div.classList.add("motcle");
-    div.innerHTML = motcle;
-    div.addEventListener('click', removeMotcle());
-    parent.appendChild(div);
-    input.value = ""
-    tab.forEach(element => {
-        input.value += element + " "
-    });
-    div.addEventListener("click", () => {
-        removeMotcle(div, input.value, tab)
-        div.remove()
-
-    })
-}

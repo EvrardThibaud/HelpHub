@@ -58,6 +58,10 @@ body.no-scroll {
     color: red;
 }
 
+#ajouter:hover{
+    color: rgb(0, 229, 255);
+}
+
 #confirmation #c{
     width: 100vw;
     background-color: rgba(23, 26, 46, 0.8);

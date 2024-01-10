@@ -11,4 +11,9 @@ class Media extends Model
     protected $table = "media";
     protected $primaryKey = "idmedia";
     public $timestamps = false;
+    public $incrementing = true;
+
+    protected $fillable = [
+        'image',
+    ];
 }

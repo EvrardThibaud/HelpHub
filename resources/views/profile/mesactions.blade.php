@@ -32,8 +32,13 @@
                                         <input type="hidden" name="id" value="{{$action->idaction}}">
                                         <button id="modifier" type="submit">Modifier</button>
                                     </form>
+                                    <form method="GET" action="{{route('profile.ajoutimage')}}">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{$action->idaction}}">
+                                        <button id="ajouter" type="submit">Ajouter image</button>
+                                    </form>
                                     
-                                    <button class="supprimer" data-action="{{ $action }}" type="text">Supprimer</button>
+                                    <button id="supprimer" data-action="{{ $action }}" type="text">Supprimer</button>
                                     
                                 </div>
                             @endif

@@ -17,7 +17,12 @@
     z-index: 9999;
 }
 
-#header a {
+#header .header-right{
+    display: flex;
+    align-items: center;
+}
+
+#header .lien {
     margin: 20px;
     color : #171a2e;
     text-decoration: none; 
@@ -33,3 +38,39 @@
     font-weight: bolder;
 
 }
+
+#header #notif{
+    font-size: 24px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+#header #notif:hover{
+    opacity: 0.8;
+    transform: scale(1.1);
+}
+
+.hiddenNotif{
+    display: none;
+}
+
+#notif_page{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: rgba(255,255,255,1);
+    z-index: 9999999;
+    min-width: 20vw;
+    min-height: 30vh;
+    padding: 15px;
+    border: #171a2e solid 2px;
+}
+
+#notif_page h3{
+    color: #fff;
+    background-color: #171a2e;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+

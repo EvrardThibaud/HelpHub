@@ -62,6 +62,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'newsletter' => $request->newsletter,
             'notification' => $request->notification,
+            // Permet de hasher le mot de passe dans la base de donnée
             'password' => Hash::make($request->password),
         ]);
 

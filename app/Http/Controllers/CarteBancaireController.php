@@ -18,19 +18,23 @@ class CarteBancaireController extends Controller
             'nomcarte' => ['required', 'string', 'max:500'],
         ]);
 
-        $userId = auth()->user()->idutilisateur;  
-
+        // Récupère l'ID de l'utilisateur actuellement authentifié
+        $userId = auth()->user()->idutilisateur;            
+        // Recherche une carte bancaire associée à cet utilisateur
         $carteBancaire = CarteBancaire::where('idutilisateur', $userId)->first();
-
+        // Vérifie si une carte bancaire existe
         if ($carteBancaire) {
+            // Met à jour les informations de la carte bancaire dans la base de données
             $carteBancaire->update([
-                'numerocarte' =>  Crypt::encrypt($request ->numerocarte),
-                'dateexpiration' =>  Crypt::encrypt($request ->dateexpiration),
-                'cryptogramme' =>  Crypt::encrypt($request ->cryptogramme),
-                'nomcarte' => Crypt::encrypt( $request ->nomcarte),
+                // Crypte le numéro de carte avant de le stocker
+                'numerocarte' =>  Crypt::encrypt($request->numerocarte),
+                // Crypte la date d'expiration avant de la stocker
+                'dateexpiration' =>  Crypt::encrypt($request->dateexpiration),
+                // Crypte    le cryptogramme avant de le stocker
+                'cryptogramme' =>  Crypt::encrypt($request->cryptogramme),
+                // Crypte le nom de la carte avant de le stocker
+                'nomcarte' => Crypt::encrypt($request->nomcarte),
             ]);
-
-
         }
 
         return redirect()->route('profile.mesinfosbancaire');

@@ -3,17 +3,7 @@ body{
     user-select: none;
 }
 
-.alert{
-    position: absolute;
-    left: 110%;
-    color: red;
-    list-style: none;
-    width: 40vw;
-}
 
-.message{
-    color: red;
-}
 
 #content{
     width: 100%;

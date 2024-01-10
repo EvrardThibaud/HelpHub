@@ -13,6 +13,12 @@ section h1{
     width: 20vw;
 }
 
+section p{
+    color: white;
+    width: 20vw;
+
+}
+
 section label{
     color: white
 }

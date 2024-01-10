@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
@@ -20,6 +22,7 @@ use App\Models\Candidature;
 use App\Models\DemandeBenevolat;
 use App\Models\Like;
 use App\Models\HistoriqueVisu;
+use App\Models\User;
 use App\Models\Information;
 use App\Models\ParticipationBenevolat;
 use App\Models\SignalementCommentaire;
@@ -70,6 +73,7 @@ class ProfileController extends Controller
     
         // Décrypter les valeurs
         foreach ($identiteBancaire as $info) {
+            // Permet de decrypter les valeurs de la base de donnée
             $info->numerocompte = Crypt::decrypt($info->numerocompte);
             $info->nomcompte = Crypt::decrypt($info->nomcompte);
         }
@@ -79,7 +83,6 @@ class ProfileController extends Controller
             $carte->dateexpiration = Crypt::decrypt($carte->dateexpiration);
             $carte->cryptogramme = Crypt::decrypt($carte->cryptogramme);
             $carte->nomcarte = Crypt::decrypt($carte->nomcarte);
-            // Assurez-vous d'ajuster les noms des colonnes en fonction de votre modèle de base de données
         }
     
         return view('profile.mesinfosbancaire', [
@@ -136,6 +139,15 @@ class ProfileController extends Controller
             'thematiques'=>Thematique::all(),
         ]);
     }
+    function ajoutimage(Request $request): View
+    {
+        $id = $request->input('id');
+        return view('profile.ajoutimage', [
+            'id'=>$id,
+            'action'=>Action::find($id),
+        ]);
+    }
+
     function powerbi(Request $request): View
     {
         return view('powerbi', [
@@ -154,34 +166,18 @@ class ProfileController extends Controller
         }
     }
 
-
-
-    public function supprimeraction(Request $request): View{
-        $id = $request->idaction;
-        if (is_numeric($id)) {
-            $action = Action::find($id);
-    
-            if ($action) {
-                HistoriqueVisu::where('idaction', $id)->delete();
-                ThematiqueAction::where('idaction', $id)->delete();
-                DemandeBenevolat::where('idaction', $id)->delete();
-                DemandeDon::where('idaction', $id)->delete();
-                Information::where('idaction', $id)->delete();
-                ActionLike::where('idaction', $id)->delete();
-                Action::where('idaction', $id)->delete();
-            } 
-        }
-        return view('profile.mesactions', [
-            'id'=>$id,
-            'actionlike'=>ActionLike::all(),
-            'associations'=>Association::all() ,
-            'participationbenevolat'=>ParticipationBenevolat::all(),
-            'participationdon'=>ParticipationDon::all(),
-            'demandebenevolat'=>DemandeBenevolat::all(),
-            'demandedon'=>DemandeDon::all(),
-            'actionlike'=>ActionLike::all(),
-        ]);
+    function changenotif(Request $request)
+    {
+        $user = User::find($request->idutilisateur);
+        
+        $user->notification = $request->notification === 'on' ? true : false;
+        $user->save();
+        return redirect()->back()->with('message', "Changement des préférences pris en compte.");
     }
+
+
+
+
 
     public function creeraction(Request $request): View
     {
@@ -233,10 +229,11 @@ class ProfileController extends Controller
         /**
      * Display the admin form
      */
-    public function administration(Request $request): View
+    public function preferences(Request $request): View
     {
-        return view('profile.administration', [
-            'actions'=>Action::all(),
+        return view('profile.preferences', [
+            'thematiques'=>Thematique::all(),
+            'associations'=>Association::all(),
         ]);
     }
 
@@ -245,6 +242,12 @@ class ProfileController extends Controller
         $id = $request->user()->idutilisateur;
         return view('profile.mescandidatures', [
             'candidatures'=>Candidature::where('idutilisateur', $id)->get(),
+        ]);
+    }
+
+    public function anonymiserdonnee(Request $request): View
+    {
+        return view('profile.anonymiserdonnee', [
         ]);
     }
 
@@ -283,6 +286,18 @@ class ProfileController extends Controller
         ]);
 
         //return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+
+    public function anonymiserdonneeform(Request $request): View
+    {
+        $date = $request->input('date');
+
+        $result = DB::selectOne('SELECT delete_users_with_date(:date) AS deleted_count', ['date' => $date]);
+
+        $deletedUserCount = $result->deleted_count;
+        
+        return view('profile.anonymiserdonnee', ['nbsuppression' => $deletedUserCount]);
     }
 
     /**

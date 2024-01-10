@@ -12,4 +12,9 @@ class ParticipationDon extends Model
     protected $primaryKey = "idparticipation";
     public $timestamps = false;
     // public $incrementing = false;
+
+    public function action()
+    {
+        return $this->belongsTo(Action::class, 'idaction', 'idaction');
+    }
 }

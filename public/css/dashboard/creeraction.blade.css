@@ -11,10 +11,15 @@ body{
     width: 40vw;
 }
 
+#media{
+    color: #fff !important;
+}
+
 #content{
     width: 100%;
+
+    min-height: 200vh;
     
-    min-height: 100vh;
 
     display: flex;
     justify-content: center;
@@ -57,9 +62,18 @@ body{
     right: 2px;
     top: 2px;
   }
-  
-  
 
+.boutonsubmitmotcle{
+    background-color: #fff;
+    color: black;
+    padding: 5px;
+}
+.boutonsubmitmotcle:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
+  
+  
 h1{
     color: #171a2e;
     width: 20vw;
@@ -70,7 +84,7 @@ h2{
     margin: 15px;
 }
 
-#form_benevolat {
+.form_creation {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -81,7 +95,7 @@ h2{
     color: white;
     font-size:1em;
     max-width: 250px;
-    max-height: 90vh;
+    height: 90vh;
     
     
 }

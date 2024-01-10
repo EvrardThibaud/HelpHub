@@ -5,6 +5,8 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -22,13 +24,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Password::defaults(function () {
-        //     return [
-        //         'length' => 12, // Nouvelle longueur minimale du mot de passe
-        //         'use_numbers' => true, // Désactiver l'utilisation des chiffres
-        //         'use_special_characters' => true,
-        //         'use_uppercase' => true,
-        //     ];
-        // });
+        Gate::define('viewPulse', function (User $user) {
+            return $user->isAdmin();
+        });
     }
 }

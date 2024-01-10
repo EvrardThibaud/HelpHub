@@ -11,7 +11,19 @@
 
         <!-- Mot clé -->
         <div id="motcle" class="input_div">
+            <div id="info-button">?</div>
+            <div id="info-box">
+                <div id="close_button">X</div>
+                <p>Ici vous pouvez rechercher une action.</p>
+                <p>En dessous de "Mots clés :" écrivez un ou plusieurs mots, si une action a un titre qui correspond à ce que vous avez écrits alors elle apparaitra dans les résultats de la recherche</p>
+                <p>En dessous de "Choisissez un lieu :"  écrivez le code postal ou le nom de la ville où vous désirez trouver une action de bénévolat</p>
+                <p>Cochez soit "Aucun triage" (par défaut), soit "Plus récents d'abord", soit "Plus anciens d'abord" pour que les résultats de votre recherche sois trié selon leur date</p>
+                <p>Choississez ensuite une association ou une thématique</p>
+                <p>Cliquez sur "Rechercher" pour voir les résulats de votre recherche qui apparaitrion sous forme de carte</p>
+                <p>Cliquer sur "Réinitialiser les filtres" pour remettre tous les paramètres de recherche comme ils étaient à votre arrivé sur le site</p>
+            </div>
             <p>Mots clés</p>
+
             <input type="text" id="motcles" name="motcles" placeholder="Exemple: Aide, marche"
             value="{{ isset($motcles) ? $motcles : '' }}">
         </div>
@@ -98,7 +110,7 @@
         </div>
     </form>
 </div>
-
+<script src="js/infobox.js"></script>
 <script>
         let timeoutId;
 

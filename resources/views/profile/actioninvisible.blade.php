@@ -10,17 +10,22 @@
 
                         @if (!($action->visible))
                             <h4 id="pasvalidetexte">L'action est invisible.</h4>
-                            <form action="{{ route('action.invisible') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="action_id" value="{{ $action->idaction }}">
-                                <button type="submit">Rendre visible</button>
-                            </form>
+                            <div class="input_div">
+                                <form action="{{ route('action.invisible') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="action_id" value="{{ $action->idaction }}">
+                                    <button id="submit_button" type="submit">Rendre visible</button>
+                                </form>
+
+                            </div>
                         @else
-                            <form action="{{ route('action.visible') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="action_id" value="{{ $action->idaction }}">
-                                <button type="submit">Rendre invisible</button>
-                            </form>
+                            <div class="input_div">
+                                <form action="{{ route('action.visible') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="action_id" value="{{ $action->idaction }}">
+                                    <button type="submit" id="submit_button">Rendre invisible</button>
+                                </form>
+                            </div>
                         @endif
                         <div class="{{ !$action->visible ? 'pasvalide' : '' }}">
                         

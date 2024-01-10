@@ -41,6 +41,11 @@ class Action extends Model
     public function likes(){
         return $this->hasMany(ActionLike::class, 'idaction', 'idaction');
     }
+    public function images(){
+        return $this->hasMany(ActionMedia::class, 'idaction', 'idaction');
+    }
+
+
     public function participationbenevolat() {
         return $this->hasMany(ParticipationBenevolat::class, 'idaction', 'idaction');
     }
@@ -53,5 +58,8 @@ class Action extends Model
         return $this->hasMany(ThematiqueAction::class, 'idaction', 'idaction');
     }
 
+    public function imagecard() {
+        return $this->belongsTo(ActionMedia::class, 'idaction', 'idaction');
+    }
 
 }

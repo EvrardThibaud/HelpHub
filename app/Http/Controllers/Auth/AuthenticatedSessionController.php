@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -34,8 +35,11 @@ class AuthenticatedSessionController extends Controller
             // Authentification réussie pour les utilisateurs
             $request->session()->regenerate();
 
+            User::where('idutilisateur', auth()->user()->idutilisateur)->update(['last_connection' => now()]);
+            
             return redirect()->intended(RouteServiceProvider::HOME);
         }
+
 
         // Redirection en cas d'échec de l'authentification
         return back()->withErrors(['email' => 'Invalid credentials']);

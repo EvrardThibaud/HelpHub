@@ -1,6 +1,6 @@
 
 
-let supprimers = document.querySelectorAll('.supprimer');
+let supprimers = document.querySelectorAll('#supprimer');
 
 supprimers.forEach(function(supprimer) {
     supprimer.addEventListener('click', function(){

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Action - {{ $action->titreaction ?? 'Aucune' }}</title>
+    <title>Action - {!! e($action->titreaction ?? 'Aucune') !!}</title>
     <link rel="stylesheet" href="{{ asset('css/action.blade.css') }}">
     <link rel="stylesheet" href="{{ asset('css/map.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -13,26 +13,29 @@
 <body>
     @include('includes.header')
 
-        @if(session('message'))
-            <script>
-                var message = '{{ session('message') }}';
-                createToast('valid', message)
-            </script>
-        @endif
+    @if(session('message'))
+    <script>
+       // Récupère le message de la session et l'échappe
+       //pour son intégration sécurisée en JavaScript
+        var message = '{!! e(session('message')) !!}';
+        // Appelle la fonction createToast avec le type 
+        //'valid' et le message 
+        createToast('valid', message);
+    </script>
+    @endif 
+
     
     @if($action)
         <div id="titre_div">
-            <h1>{{ $action->titreaction }}</h1>
+            <h1>{!! e($action->titreaction) !!}</h1>
         </div> 
         <main>
             <div id="container_left">
-                
                 <div id="action_div">
-                    <p id="asso_action">Action proposée par <a href="/association?id={{ $action->idassociation }}">{{ $action->nomassociation }}</a> </p>
-                    <p id="description_action">{{ $action->descriptionaction }}</p>
+                    <p id="asso_action">Action proposée par <a href="/association?id={{ $action->idassociation }}">{!! e($action->nomassociation) !!}</a></p>
+                    <p id="description_action">{!! e($action->descriptionaction) !!}</p>
                     <p id="date_action">{{ \Carbon\Carbon::parse($action->datepublicationaction)->isoFormat('D MMMM Y', 'Do MMMM Y') }}</p>
                 </div>
-                
 
                 <div id="comentaires_div">
                     <h2 id="titrecom">Les commentaires</h2>
@@ -42,7 +45,7 @@
                             <form action="{{ route('comment.add') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="action_id" value="{{ $action->idaction }}">
-                                <textarea name="new_comment" placeholder="Votre commentaire." required></textarea>
+                                <textarea name="new_comment" placeholder="Votre commentaire." required>{{ old('new_comment') }}</textarea>
                                 <button type="submit">Ajouter le commentaire</button>
                             </form>
                         @else
@@ -124,9 +127,11 @@
             
 
             <div id="container_right">
-            <img src="https://www.bourdet-avocat.fr/wp-inside/uploads/2020/10/aide-par-les-proches-dans-les-actes-de-la-vie-courante-25.10.2020.jpg" alt="">
+                @foreach ($action->images as $img)
+                    <img src="/storage/{{$img->media->image}}" alt="">
+                @endforeach
                 <h3>Plus d'informations</h3>
-                
+                <p>Mot clés: {{$action->motcles}}</p>
                 <form id="form_like_action" action="incrementer-likes-action" method="POST">
                     @csrf
                     <input type="hidden" name="idaction" value="{{ $action->idaction }}">
@@ -223,53 +228,3 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </body>
 </html>
-<script>
-    let slideIndex = 0;
-    let timer;
-
-    function showSlides() {
-        const slides = document.querySelectorAll('.carousel-container img');
-        if (slides.length > 1) {
-            slideIndex++;
-            if (slideIndex >= slides.length) {
-            slideIndex = 0;
-            }
-            const offset = -100 * slideIndex;
-            document.querySelector('.carousel-container').style.transform = `translateX(${offset}vw)`;
-            startTimer(); // Redémarre le timer à chaque transition
-        }
-    }
-
-    function prevSlide() {
-        slideIndex--;
-        if (slideIndex < 0) {
-            slideIndex = document.querySelectorAll('.carousel-container img').length - 1;
-        }
-        const offset = -100 * slideIndex;
-        document.querySelector('.carousel-container').style.transform = `translateX(${offset}vw)`;
-        resetTimer(); // Réinitialise le timer lors du clic sur le bouton précédent
-    }
-
-    function nextSlide() {
-        slideIndex++;
-        if (slideIndex >= document.querySelectorAll('.carousel-container img').length) {
-            slideIndex = 0;
-        }
-        const offset = -100 * slideIndex;
-        document.querySelector('.carousel-container').style.transform = `translateX(${offset}vw)`;
-        resetTimer(); // Réinitialise le timer lors du clic sur le bouton suivant
-    }
-
-    function startTimer() {
-        clearInterval(timer);
-        timer = setInterval(showSlides, 5000); // Change d'image toutes les 2 secondes (ajuste selon tes besoins)
-    }
-
-    function resetTimer() {
-        clearInterval(timer);
-        startTimer();
-    }
-
-    startTimer(); // Démarre le carousel au chargement de la page
-
-</script>

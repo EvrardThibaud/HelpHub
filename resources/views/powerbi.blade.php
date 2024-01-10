@@ -11,8 +11,7 @@
 
     @include('includes.header')
 
-    <iframe title="rapport" width="1524" height="704" src="https://app.powerbi.com/view?r=eyJrIjoiOGEyYmFiNGMtNmQzMi00MWVlLWE0NmEtNTEyYmNkZDg2ODI0IiwidCI6ImUyMWU5NzgzLWQwYTAtNDhmOC04NTBlLTBiMDgxYjQ2ZDc4OCIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-
+    <iframe title="Report Section" width="1750" height="954" src="https://app.powerbi.com/view?r=eyJrIjoiYWQ5NGI3NDAtZWIzZS00OTEwLTkyYmMtMzgyOWE2OTZkZDM0IiwidCI6ImUyMWU5NzgzLWQwYTAtNDhmOC04NTBlLTBiMDgxYjQ2ZDc4OCIsImMiOjh9&embedImagePlaceholder=true" frameborder="0" allowFullScreen="true"></iframe>
     @include('includes.footer')
 
     

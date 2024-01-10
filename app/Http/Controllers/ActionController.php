@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Association;
 use App\Models\Commentaire;
 use App\Models\Utilisateur;
@@ -69,20 +70,19 @@ class ActionController extends Controller
             $id = -1;
         }
         $query = Commentaire::join('utilisateur', 'commentaire.idutilisateur', '=', 'utilisateur.idutilisateur')
-        ->leftJoin('media', 'utilisateur.idmedia', '=', 'media.idmedia')
         ->where('commentaire.idaction', $id);
         $commentaires = $query->orderBy('datecommentaire', 'DESC')->get();
         $action = Action::join('association', 'action.idassociation', '=', 'association.idassociation')
-        ->select('action.*', 'association.*', 'media.image')
-        ->leftJoin('media', 'action.idmedia', '=', 'media.idmedia')
+        ->select('action.*', 'association.*')
         ->where('action.idaction', $id)
         ->first();
         
         // Ajout de l'enregistrement HistoriqueVisu
         if (Auth::check()) {
             $userId = auth()->user()->idutilisateur;
-
-            $this->gererVisualisations($userId, $id);
+            if($action){
+                $this->gererVisualisations($userId, $id);
+            }
         }
 
 
@@ -128,9 +128,8 @@ class ActionController extends Controller
 
         //Récupération des données
         $query = Action::query()
-        ->select('action.*', 'association.*', 'departement.*', 'media.image', 'demandebenevolat.codepostaladresse')
+        ->select('action.*', 'association.*', 'departement.*', 'demandebenevolat.codepostaladresse')
         ->join('association', 'action.idassociation', '=', 'association.idassociation')
-        ->leftJoin('media', 'action.idmedia', '=', 'media.idmedia')
         ->leftJoin('demandebenevolat', 'action.idaction', '=', 'demandebenevolat.idaction')
         ->leftJoin('adresse', 'demandebenevolat.codepostaladresse', '=', 'adresse.codepostaladresse')
         ->leftJoin('departement', 'adresse.numdepartement', '=', 'departement.numdepartement')
@@ -216,7 +215,6 @@ class ActionController extends Controller
 
         $actions = $query = Action::orderByDesc('datepublicationaction')->take(3)
         ->join('association', 'action.idassociation', '=', 'association.idassociation')
-        ->leftJoin('media', 'action.idmedia', '=', 'media.idmedia')
         ->where('action.valideparservice', true)
         ->where('action.visible', true)
         ->get();
@@ -267,15 +265,7 @@ class ActionController extends Controller
 
 
 
-    public function participer(Request $request)
-    {
-    
-        if (auth()->check()) {
-            return view('form_participe');
-        } else {
-            return redirect()->route('login')->with('error', 'Vous devez être connecté pour participer à une action de bénévolat.');
-        }
-    }
+   
     
     public function rendreInvisible(Request $request)
     {

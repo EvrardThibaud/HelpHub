@@ -8,10 +8,7 @@ use App\Models\Like;
 
 class CommentaireController extends Controller
 {
-    
 
-    
- 
     public function incrementerLikes(Request $request)
     {
         $request->validate([
@@ -84,7 +81,7 @@ class CommentaireController extends Controller
             'new_comment' => 'required|string|max:255',
         ]);
 
-        $comment = new Commentaire([
+        $comment = new Commentaire([    
             'idutilisateur' => auth()->user()->idutilisateur,
             'idaction' => $request->input('action_id'),
             'textecommentaire' => $request->input('new_comment'),

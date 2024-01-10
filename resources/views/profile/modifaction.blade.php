@@ -7,11 +7,13 @@
         <h1>Modifier une action</h1>
         <div id="content">
             @if ($action->demandebenevolat)
-            
+                <script>
+                    var typeAction = "benevolat";
+                </script>
             
                 <div id="form-Bénévolat">
                     <h2>Action de bénévolat</h2>
-                    <form id="form_benevolat" method="POST" action="{{ route('modifbenevolat') }}">
+                    <form clas="form_creation" id="form_benevolat" method="POST" action="{{ route('modifbenevolat') }}" data-action="{{$action}}">
                         @csrf
 
                         <input name="idaction" type="hidden" value="{{$action->idaction}}">
@@ -84,13 +86,22 @@
                                 <x-input-error :messages="$errors->get('nombreparticipantdb')" class="alert" />
                             </div>
 
-                            <!-- Image -->
-                            <div class="media">
-                                <x-input-label for="media" :value="__('Objectif de participant :')" />
-                                <x-text-input id="media" class="" type="file" name="media" :value="old('media')"  />
-                                <x-input-error :messages="$errors->get('media')" class="alert" />
+    
+                            <!-- Mot cles -->
+                            <div class="input_div">
+                                <x-input-label for="motcles" :value="__('Mot clés :')" />
+                                <x-text-input id="motclesbenevolat" class="" type="hidden" name="motcles" :value="old('motcles')" required autofocus autocomplete="motcles"/>
+                                <div id="lesmotclesbenevolat" class="lesmotcles">
+                                    <script>
+                                       
+                                    </script>
+                                </div>
+                                <div id="formbenevolatmotcle" class="flex">
+                                    <input placeholder="Mot clé" id="letmotclebenevolat" type="text">
+                                    <p id="submitmotclebenevolat" class="boutonsubmitmotcle"  type="submit">+</p>
+                                </div>
+                                <x-input-error :messages="$errors->get('motcles')" class="alert" />
                             </div>
-
                             
                             <!-- Thematiques -->
                             <div id="newsletter_div">
@@ -125,9 +136,12 @@
                     </form>
                 </div>
             @elseif ($action->demandedon)
+                <script>
+                    var typeAction = "don";
+                </script>
                 <div id="form-Don">
                     <h2>Action de don</h2>
-                    <form id="form_don" method="POST" action="{{ route('modifdon') }}">
+                    <form class="form_creation" id="form_don" method="POST" action="{{ route('modifdon') }}" data-action="{{$action}}">
                         @csrf
 
                         <input name="idaction" type="hidden" value="{{$action->idaction}}">
@@ -170,6 +184,21 @@
                                 <input id="objectifdon" class="" type="text" name="objectifdon" value="{{$action->demandedon->objectifdon}}" placeholder="100" required />
                                 <x-input-error :messages="$errors->get('objectifdon')" class="alert" />
                             </div>
+   
+
+                            <!-- Mot cles -->
+                            <div class="input_div">
+                                <x-input-label for="motcles" :value="__('Mot clés :')" />
+                                <x-text-input id="motclesdon" class="" type="hidden" name="motcles" :value="old('motcles')" required autofocus autocomplete="motcles"/>
+                                <div id="lesmotclesdon" class="lesmotcles">
+                                
+                                </div>
+                                <div id="formdonmotcle" class="flex">
+                                    <input placeholder="Mot clé" id="letmotcledon" type="text">
+                                    <p id="submitmotcledon" class="boutonsubmitmotcle" type="submit">+</p>
+                                </div>
+                                <x-input-error :messages="$errors->get('motcles')" class="alert" />
+                            </div>
                             <!-- Thematiques -->
                             <div id="newsletter_div">
                                 <div id="them_benevolat">
@@ -203,9 +232,12 @@
                 </div>
 
             @else
+                <script>
+                    var typeAction = "information";
+                </script>
                 <div id="form-Information">
                     <h2>Action de information</h2>
-                    <form id="form_information" method="POST" action="{{ route('modifinformation') }}">
+                    <form class="form_creation" id="form_information" method="POST" action="{{ route('modifinformation') }}" data-action="{{$action}}">
                         @csrf
 
                         <input name="idaction" type="hidden" value="{{$action->idaction}}">
@@ -225,6 +257,21 @@
                                 <x-input-error :messages="$errors->get('descriptionaction')" class="alert" />
                             </div>
 
+
+
+                            <!-- Mot cles -->
+                            <div class="input_div">
+                                <x-input-label for="motcles" :value="__('Mot clés :')" />
+                                <x-text-input id="motclesinformation" class="" type="hidden" name="motcles" :value="old('motcles')" required autofocus autocomplete="motcles"/>
+                                <div id="lesmotclesinformation" class="lesmotcles">
+                                
+                                </div>
+                                <div id="forminformationmotcle" class="flex">
+                                    <input placeholder="Mot clé" id="letmotcleinformation" type="text">
+                                    <p id="submitmotcleinformation" class="boutonsubmitmotcle"  type="submit">+</p>
+                                </div>
+                                <x-input-error :messages="$errors->get('motcles')" class="alert" />
+                            </div>
 
                             <!-- Thematiques -->
                             <div id="newsletter_div">
@@ -260,6 +307,7 @@
             @endif
         </div>
     </div>
+    <script src="js/modifaction.blade.js" defer></script>
 
 </x-app-layout>
 

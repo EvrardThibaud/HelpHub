@@ -34,13 +34,13 @@
   }
 
   #leftsection{
-    background-color: red;
+    background-color: rgba(127,127,127,0.2);
     width: 70vw;
     min-height: 80vh;
   }
 
   #rightsection{
-    background-color: green;
+    background-color: rgba(45, 45, 45, 0.2);
     width: 30vw;
     min-height: 80vh;
   }
@@ -54,3 +54,23 @@
     flex-wrap: wrap;
     justify-content: space-around;
   }
+#les_dons{
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.parti_don{
+  width: 360px;
+  background-color: whitesmoke;
+  border: #171a2e solid 2px;
+  padding: 10px;
+}
+.parti_don h4{
+  background-color: #171a2e;
+  color: white;
+  padding: 15px;
+}
+
+.parti_don h4 a{
+  color: white;
+}

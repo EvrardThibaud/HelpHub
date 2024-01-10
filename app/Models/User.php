@@ -32,6 +32,8 @@ class User extends Authenticatable
         'notification',
         'idcivilite',
         'datenaissance',
+        'last_connection',
+        'dpo',
     ];
 
     /**
@@ -82,6 +84,11 @@ class User extends Authenticatable
         return $this->hasMany(HistoriqueVisu::class, 'idutilisateur', 'idutilisateur')->orderBy('numerovisu', 'asc');
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'idutilisateur', 'idutilisateur')->orderBy('datenotification', 'asc');
+    }
+
     public function actionLike()
     {
         return $this->hasOne(ActionLike::class, 'idutlisateur', 'idutlisateur');
@@ -94,13 +101,17 @@ class User extends Authenticatable
 
     public function participationdon()
     {
-        return $this->belongsTo(ParticipationDon::class, 'idutilisateur', 'idutilisateur');
+        return $this->hasMany(ParticipationDon::class, 'idutilisateur', 'idutilisateur');
     }
     public function participationbenevole()
     {
-        return $this->belongsTo(ParticipationBenevolat::class, 'idutilisateur', 'idutilisateur');
+        return $this->hasMany(ParticipationBenevolat::class, 'idutilisateur', 'idutilisateur');
     }
 
-   
+    public function isAdmin()
+    {
+        // Vérifiez si la colonne 'admin' est définie à true (ou 1, selon la configuration)
+        return $this->admin === true; // Assurez-vous que 'admin' correspond à votre colonne booléenne
+    }
     
 }

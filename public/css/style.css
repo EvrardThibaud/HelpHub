@@ -40,6 +40,8 @@ input{
     height: 25px;
     width: 200px;
     padding: 5px;
+        
+    border: 1px solid #171a2e;
 
     color:  #171a2e;
     font-weight: bolder;
@@ -60,19 +62,20 @@ select{
 /* ---- SUBMIT ---- */
 
 
-#submit_button{
-    height: 35px;
+#submit_button, #boutonSuppr{
+    min-height: 35px;
+    height: auto ;
     width: 210px;
     margin-top: 10px;
 
     border-radius: 0;
     background-color: white;
 
-    border: none;
+    border: 1px solid #171a2e;
 
     color:  #171a2e;
     font-weight: bolder;
-
+    white-space: normal;
     cursor: pointer;
     
     transition-duration: 0.2s;
@@ -85,4 +88,57 @@ select{
 
 .sumbit_delete_button{
     background-color: red !important;
+}
+
+
+/* ALERT ET MESSAGE */
+
+.alert{
+    position: absolute;
+    left: 110%;
+    color: red;
+    list-style: none;
+    width: 40vw;
+}
+
+.message{
+    color: red;
+}
+
+
+/* INFO  */
+#info-box {
+    display: none;
+    position: absolute;
+    background-color: #171a2e;
+    border: 1px solid white;
+    padding: 10px;
+    max-width: 200px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000000000;
+}
+
+#info-button {
+    cursor: pointer;
+    background-color: #ffffff;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    border-radius: 100px;
+    color: #171a2e;
+    outline: none;
+} 
+
+#close_button{
+    position: fixed;
+    cursor: pointer;
+    background-color: #171a2e;
+
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    border-radius: 100px;
+
+    margin-bottom: 20px;
 }

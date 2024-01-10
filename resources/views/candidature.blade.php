@@ -3,7 +3,7 @@
 <div id="content">
 
     @if(session('message'))
-    <div class="alert">
+    <div class="message">
         {{ session('message') }}
     </div>
     @endif

@@ -1,3 +1,33 @@
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Traitement du formulaire et sauvegarde des préférences
+    if (isset($_POST["savePreferences"])) {
+        $preferences = [];
+        if (isset($_POST["name"])) {
+            $preferences[] = "Nom";
+        }
+        if (isset($_POST["firstName"])) {
+            $preferences[] = "Prénom";
+        }
+        if (isset($_POST["phone"])) {
+            $preferences[] = "N° de téléphone";
+        }
+        if (isset($_POST["email"])) {
+            $preferences[] = "Email";
+        }
+        if (isset($_POST["address"])) {
+            $preferences[] = "Adresse";
+        }
+        if (isset($_POST["gender"])) {
+            $preferences[] = "Civilité";
+        }
+
+        $preferencesJson = json_encode($preferences);
+        file_put_contents("preferences.json", $preferencesJson);
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,62 +39,60 @@
 <body>
 
     @include('includes.header')
-    <h1>Personnaliser les cookies</h1>
 
-    <main>
-        <div class="container">
-            <section id="cookie-preferences">
-                <h2>Personnaliser les préférences sur les cookies</h2>
-                <p>Nous utilisons des cookies et des outils similaires (collectivement appelés les « cookies ») aux fins décrites ci-dessous. Les tiers approuvés utilisent également des cookies à des fins limitées liées aux publicités décrites ci-dessous. Nous appliquerons vos préférences en matière de cookies sur le service Amazon (version du site web et de l'application) sur lequel vous vous êtes identifié. Si vous n'êtes pas connecté, nous devrons peut-être vous demander à nouveau vos préférences.</p>
-
-                <div class="cookie-option">
-                    <input type="checkbox" id="accept-all-cookies" checked>
-                    <label for="accept-all-cookies">Accepter tous les cookies</label>
+    <div class="cookie-settings">
+        <h2>Paramètres de Confidentialité</h2>
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <div class="privacy-settings">
+                <label>
+                    <input type="checkbox" id="acceptAll" checked>
+                    Accepter tous les cookies
+                </label>
+                <label>
+                    <input type="checkbox" id="savePreferences" name="savePreferences">
+                    Choisir mes préférences
+                </label>
+                <div id="preferencesOptions">
+                    <label><input type="checkbox" name="name"> Nom</label>
+                    <label><input type="checkbox" name="firstName"> Prénom</label>
+                    <label><input type="checkbox" name="phone"> N° de téléphone</label>
+                    <label><input type="checkbox" name="email"> Email</label>
+                    <label><input type="checkbox" name="address"> Adresse</label>
+                    <label><input type="checkbox" name="gender"> Civilité</label>
                 </div>
+            </div>
 
-                <div class="cookie-option">
-                    <input type="checkbox" id="save-custom-preferences">
-                    <label for="save-custom-preferences">Sauvegarder les préférences personnalisées</label>
+            <div class="cookie-slide">
+                <h3>Cookie Opérationnel</h3>
+                <p>Les cookies opérationnels sont nécessaires au fonctionnement du site web. Vous ne pouvez pas les désactiver.</p>
+            </div>
+
+            <div class="cookie-settings">
+                <h2>Cookies Publicitaires</h2>
+                <label>
+                    <input type="checkbox" id="advertisingHelpHub">
+                    Accepter les publicités HelpHub
+                </label>
+                <label>
+                    <input type="checkbox" id="thirdPartyAds" name="thirdPartyAds">
+                    Choix publicitaires
+                </label>
+                <div id="thirdPartyOptions">
+                    <!-- Remplacez les noms des publicités tiers ci-dessous -->
+                    <label><input type="checkbox" name="ad1"> Publicité 1</label>
+                    <label><input type="checkbox" name="ad2"> Publicité 2</label>
+                    <label><input type="checkbox" name="ad3"> Publicité 3</label>
+                    <label><input type="checkbox" name="ad4"> Publicité 4</label>
+                    <label><input type="checkbox" name="ad5"> Publicité 5</label>
                 </div>
+            </div>
 
-                <div class="cookie-category">
-                    <h2>Cookies opérationnels</h2>
-                    <p>Les cookies opérationnels ne peuvent pas être désactivés dans la mesure où nous les utilisons pour vous fournir nos services.</p>
-                </div>
-
-                <div class="cookie-category">
-                    <h2>Cookies publicitaires</h2>
-                    <p>Ces cookies nous permettent de vous proposer d'autres types de publicités (par exemple, pour des produits et services non disponibles sur Amazon), notamment des publicités correspondant à vos centres d'intérêt, et de collaborer avec des tiers approuvés dans le cadre du processus de diffusion de contenu, afin de mesurer l'efficacité des publicités et d'effectuer des services pour le compte d'Amazon.</p>
-
-                    <p>Pour en savoir plus sur la façon dont Amazon présente des publicités basées sur les centres d’intérêt, consultez Publicités basées sur vos Centres d’Intérêt. Pour modifier vos préférences en matière de publicités basées vos centres d’intérêt, rendez-vous sur la page Préférences pour les publicités sur Amazon.</p>
-
-                    <div class="customize-ad-options">
-                        <div class="cookie-option">
-                        <div class="toggle-switch">
-                        <input type="checkbox" id="pubHelpHub-cookies" checked disabled>
-                        <!-- Ajoutez une balise span pour personnaliser le style -->
-                        <label for="operational-cookies"><span class="custom-checkbox"></span></label>
-                    </div>
-                            <label for="helphub-ads">Publicité HelpHub</label>
-                        </div>
-
-                        <div class="cookie-option">
-                        <div class="toggle-switch">
-                        <input type="checkbox" id="pubtiers-cookies" checked disabled>
-                        <!-- Ajoutez une balise span pour personnaliser le style -->
-                        <label for="operational-cookies"><span class="custom-checkbox"></span></label>
-                    </div>
-                            <label for="third-party-ads">Publicitaires tiers approuvés</label>
-                        </div>
-                    </div>
-
-                    <button id="customize-ad-cookies">Personnaliser les cookies publicitaires</button>
-                </div>
-            </section>
-        </div>
-    </main>
+            <button href="welcome" >Sauvegarder</button>
+        </form>
+    </div>
 
     @include('includes.footer')
 
+    <script src="js/persoCookie.blade.js"></script>
 </body>
 </html>

@@ -12,4 +12,9 @@ class ParticipationBenevolat extends Model
     protected $primaryKey = "idparticipationbenevolat";
     public $timestamps = false;
     // public $incrementing = false;
+
+    public function action()
+    {
+        return $this->belongsTo(Action::class, 'idaction', 'idaction');
+    }
 }

@@ -47,14 +47,19 @@ class CandidatureController extends Controller
         return redirect()->back()->with('message', 'Candidature ajoutée avec succès!');
     }
 
-    public function formulaireCandidature(Request $request): View
+    public function formulaireCandidature(Request $request)
     {
-        $id = $request->idaction;
-        return view('candidature', [
-            'id' => $id,
-            'user' => $request->user(),
-            'civilites'=>Civilite::All(),
-        ]);
+        if (auth()->check()) {
+            $id = $request->idaction;
+            return view('candidature', [
+                'id' => $id,
+                'user' => $request->user(),
+                'civilites'=>Civilite::All(),
+            ]);
+        } else {
+            return redirect()->route('login')->with('error', 'Vous devez être connecté pour participer à une action de bénévolat.');
+        }
+        
     }
     
 
